@@ -42,18 +42,19 @@ fi
 #mkdir $HOME/Documents/github
 
 # Backup existing .zshrc before install Oh My Zsh
-cp $HOME/.zshrc $HOME/.zshrc.backup
+cp $HOME/.zshrc $HOME/.zshrc.original
 
 # Install Oh My Zsh
-rm -rf $HOME/.oh-my-zsh
+rm -rf $ZSH
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 
-# Removes .zshrc from $HOME (if it exists) and symlinks the .zshrc file from the .dotfiles
-rm -f $HOME/.zshrc
-ln -s $HOME/.dotfiles/.zshrc $HOME/.zshrc
+#### Install PowerLeve10K theme
+rm -f $HOME/.p10k.zsh
+git clone https://github.com/romkatv/powerlevel10k.git $ZSH/themes/powerlevel10k
 
-# Load new .zshrc
-source $HOME/.zshrc
+#### Download PowerLeve10K Plugins for autosuggestion and syntax highlighting:
+git clone https://github.com/zsh-users/zsh-autosuggestions.git $ZSH/plugins/zsh-autosuggestions
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $ZSH/plugins/zsh-syntax-highlighting
 
 # Upgrade oh_my_zsh
 upgrade_oh_my_zsh
