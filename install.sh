@@ -63,7 +63,7 @@ rm $HOME/.zshrc
 ln -s $HOME/.dotfiles/.zshrc $HOME/.zshrc
 
 # Load new .zshrc
-source $HOME/.zshrc
+#source $HOME/.zshrc
 
 # Clone Github repositories
 ./clone.sh
