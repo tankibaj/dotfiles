@@ -66,4 +66,4 @@ ln -s $HOME/.dotfiles/.zshrc $HOME/.zshrc
 source $HOME/.zshrc
 
 # Clone Github repositories
-#./clone.sh
+# ./clone.sh
