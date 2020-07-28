@@ -1,4 +1,4 @@
-## Install macOS Command Line Tools 
+## Install macOS command line tool
 
 ```bash
 xcode-select --install
