@@ -42,16 +42,6 @@ sh -c "$(wget -O- https://raw.githubusercontent.com/tankibaj/dotfiles/master/ins
 ```
 
 
-## Zshrc
-
-#### Removes .zshrc from $HOME (if it exists) and symlinks the .zshrc file from the .dotfiles
-
-```bash
-rm -f $HOME/.zshrc && \
-ln -s $HOME/.dotfiles/.zshrc $HOME/.zshrc && \
-source $HOME/.zshrc
-```
-
 ## Powerlevel10k configuration wizard
 
 ```bash

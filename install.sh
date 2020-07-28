@@ -45,8 +45,10 @@ fi
 cp $HOME/.zshrc $HOME/.zshrc.original
 
 # Install Oh My Zsh
+ZSH=$HOME/.oh-my-zsh
 rm -rf $ZSH
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+#sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+git clone https://github.com/ohmyzsh/ohmyzsh.git $ZSH
 
 #### Install PowerLeve10K theme
 rm -f $HOME/.p10k.zsh
@@ -56,8 +58,12 @@ git clone https://github.com/romkatv/powerlevel10k.git $ZSH/themes/powerlevel10k
 git clone https://github.com/zsh-users/zsh-autosuggestions.git $ZSH/plugins/zsh-autosuggestions
 git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $ZSH/plugins/zsh-syntax-highlighting
 
-# Upgrade oh_my_zsh
-upgrade_oh_my_zsh
+# Removes .zshrc from $HOME (if it exists) and symlinks the .zshrc file from the .dotfiles
+rm $HOME/.zshrc
+ln -s $HOME/.dotfiles/.zshrc $HOME/.zshrc
+
+# Load new .zshrc
+source $HOME/.zshrc
 
 # Clone Github repositories
 ./clone.sh
