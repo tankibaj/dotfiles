@@ -42,8 +42,9 @@ sh -c "$(wget -O- https://raw.githubusercontent.com/tankibaj/dotfiles/master/ins
 ```
 
 
-## Powerlevel10k configuration wizard
+## Source new .zshrc and powerlevel10k configuration wizard
 
 ```bash
+source $HOME/.zshrc
 p10k configure
 ```
