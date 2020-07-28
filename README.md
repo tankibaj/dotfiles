@@ -5,7 +5,7 @@ xcode-select --install
 ```
 
 
-## Setup SSH Key
+## Setup SSH key
 First of all, copy your ssh private and public key to `~/.ssh`
 
 Make sure that ssh agent is running.
