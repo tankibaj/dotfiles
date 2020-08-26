@@ -97,6 +97,12 @@ alias nginxError='tail -n 100 /usr/local/var/log/nginx/error.log'
 
 # Youtube download
 alias ydl='cd ~/Downloads && youtube-dl -f bestvideo+bestaudio'
+alias ydl-mp3='cd ~/Downloads && youtube-dl --ignore-errors --output "%(title)s.%(ext)s" --extract-audio --audio-format mp3'
+alias ydl-m4a='cd ~/Downloads && youtube-dl --ignore-errors --output "%(title)s.%(ext)s" --extract-audio --audio-format m4a'
+alias ydl-wav='cd ~/Downloads && youtube-dl --ignore-errors --output "%(title)s.%(ext)s" --extract-audio --audio-format wav'
+alias ydl-aac='cd ~/Downloads && youtube-dl --ignore-errors --output "%(title)s.%(ext)s" --extract-audio --audio-format aac'
+alias ydl-audio='cd ~/Downloads && youtube-dl --ignore-errors --output "%(title)s.%(ext)s" --extract-audio --audio-format best'
+
 
 # Markdown
 alias toc='gh-md-toc'
