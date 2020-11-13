@@ -18,13 +18,14 @@ brew 'zlib' # Needed for Memcached
 brew 'youtube-dl'
 brew 'svn'
 brew 'speedtest'
+brew 'github-markdown-toc'
 
 # Spatie Medialibrary
-brew 'jpegoptim'
-brew 'optipng'
-brew 'pngquant'
-brew 'svgo'
-brew 'gifsicle'
+#brew 'jpegoptim'
+#brew 'optipng'
+#brew 'pngquant'
+#brew 'svgo'
+#brew 'gifsicle'
 
 # Development
 brew 'php'
