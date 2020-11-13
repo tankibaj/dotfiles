@@ -11,6 +11,7 @@ alias fdns="sudo dscacheutil -flushcache && sudo killall -HUP mDNSResponder && e
 alias ssh-config="subl ~/.ssh/config"
 alias myip="curl https://ipecho.net/plain"
 alias whoIsMe="curl -s "http://ifconfig.co/json" | jq -r '.'"
+alias ipv6="curl -s ipv6.icanhazip.com"
 
 # Directories
 alias home="cd ~"
