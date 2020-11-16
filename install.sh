@@ -62,6 +62,9 @@ git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $ZSH/plugins/
 rm $HOME/.zshrc
 ln -s $HOME/.dotfiles/.zshrc $HOME/.zshrc
 
+# Source browser.sh
+source $HOME/.dotfiles/browser.sh
+
 # Load new .zshrc
 #source $HOME/.zshrc
 
