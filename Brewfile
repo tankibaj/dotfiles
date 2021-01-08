@@ -1,9 +1,8 @@
 # Taps
+tap 'homebrew/bundle'
 tap 'homebrew/cask'
-tap 'homebrew/cask-eid'
 tap 'homebrew/cask-fonts'
 tap 'homebrew/cask-versions'
-tap 'homebrew/bundle'
 tap 'teamookla/speedtest'
 
 # Binaries
@@ -59,6 +58,7 @@ brew 'tunnelblick'
 brew 'spotify'
 brew 'iterm2'
 brew 'visual-studio-code'
+brew 'vnc-viewer'
 
 # Fonts
 brew 'font-fira-code'
