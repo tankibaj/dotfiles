@@ -60,6 +60,8 @@ brew 'iterm2'
 brew 'visual-studio-code'
 brew 'vnc-viewer'
 brew 'notion'
+brew 'grammarly'
+
 
 # Fonts
 brew 'font-fira-code'
