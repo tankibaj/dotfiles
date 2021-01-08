@@ -1,10 +1,4 @@
 # Basic For Mac OS
-alias zshrc='open -a /Applications/Sublime\ Text.app ~/.dotfiles/.zshrc'
-alias aliases='open -a /Applications/Sublime\ Text.app ~/.dotfiles/aliases.zsh'
-alias path='open -a /Applications/Sublime\ Text.app ~/.dotfiles/path.zsh'
-alias hosts='open -a /Applications/Sublime\ Text.app /etc/hosts'
-alias subl="open -a /Applications/Sublime\ Text.app"
-alias phps='open -a PhpStorm ./'
 alias terminal-reload='source ~/.dotfiles/.zshrc'
 alias copy-ssh-key="cat ~/.ssh/id_rsa.pub | pbcopy && echo 'SSH Public Key Copied To Clipboard'"
 alias fdns="sudo dscacheutil -flushcache && sudo killall -HUP mDNSResponder && echo 'DSN Flushed'"
@@ -12,6 +6,18 @@ alias ssh-config="subl ~/.ssh/config"
 alias myip="curl https://ipecho.net/plain"
 alias whoIsMe="curl -s "http://ifconfig.co/json" | jq -r '.'"
 alias ipv6="curl -s ipv6.icanhazip.com"
+alias zshrc='open -a /Applications/Sublime\ Text.app ~/.dotfiles/.zshrc'
+alias aliases='open -a /Applications/Sublime\ Text.app ~/.dotfiles/aliases.zsh'
+alias path='open -a /Applications/Sublime\ Text.app ~/.dotfiles/path.zsh'
+alias hosts='open -a /Applications/Sublime\ Text.app /etc/hosts'
+
+
+# Open Application
+alias subl="open -a /Applications/Sublime\ Text.app ./"
+alias phps='open -a PhpStorm ./'
+alias vsc='open -a /Applications/Visual\ Studio\ Code.app ./'
+alias typora='open -a /Applications/Typora.app ./'
+
 
 # Directories
 alias home="cd ~"
@@ -19,13 +25,16 @@ alias docs="cd ~/Documents"
 alias dl="cd ~/Downloads"
 alias app="cd /Applications"
 alias sites="cd ~/sites"
+alias snippets="cd ~/Documents/Snippets"
 alias github="cd ~/Documents/github"
 alias dotfiles='~/.dotfiles'
+
 
 # Brew
 alias app-upgrade='brew upgrade && brew cask upgrade'
 alias cask-list='brew cask list'
 alias cask-upgrade='brew cask upgrade'
+
 
 # Git
 #alias init='git init'
@@ -49,6 +58,7 @@ alias remote-remove='git remote remove'
 alias remote-rename='git remote rename'
 alias commit-count='git rev-list --count'
 alias git-remove='rm -rf .git*'
+
 
 # Laravel
 alias artisan='php artisan'
@@ -74,8 +84,10 @@ alias cache-config='php artisan config:cache'
 alias cache-route='php artisan route:cache '
 alias cache-view='php artisan view:cache'
 
+
 # Composer
 alias autodump='composer dump-autoload'
+
 
 # Vagrant
 alias vssh="vagrant ssh"
@@ -91,10 +103,10 @@ alias box-list='vagrant box list'
 alias box-remove='vagrant box remove'
 alias box-add='vagrant box add'
 
+
 # Nginx
 alias nginxError='tail -n 100 /usr/local/var/log/nginx/error.log'
 
-# PHP
 
 # Youtube download
 alias ydl='cd ~/Downloads && youtube-dl -f bestvideo+bestaudio'
