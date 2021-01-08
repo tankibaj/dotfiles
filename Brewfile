@@ -81,3 +81,4 @@ mas 'Whatsapp', id: 1147396723
 mas 'Boop', id: 1518425043
 mas 'Termius', id: 1176074088
 mas 'SnippetsLab', id: 1006087419
+mas 'Magnet', id: 441258766
