@@ -61,6 +61,7 @@ brew 'visual-studio-code'
 brew 'vnc-viewer'
 brew 'notion'
 brew 'grammarly'
+brew 'upic'
 
 
 # Fonts
