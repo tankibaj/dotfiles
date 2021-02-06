@@ -10,6 +10,15 @@ alias zshrc='open -a /Applications/Sublime\ Text.app ~/.dotfiles/.zshrc'
 alias aliases='open -a /Applications/Sublime\ Text.app ~/.dotfiles/aliases.zsh'
 alias path='open -a /Applications/Sublime\ Text.app ~/.dotfiles/path.zsh'
 alias hosts='open -a /Applications/Sublime\ Text.app /etc/hosts'
+alias ls='ls -lhF'
+alias ls.='ls -lhFa'
+alias size="du -sh"
+
+# Prompt confirmation and explain what is being done
+alias rm='rm -iv'
+alias mv='mv -iv'
+alias cp='cp -iv'
+alias ln='ln -iv'
 
 
 # Open Application
@@ -155,4 +164,8 @@ codeBlockBash() {
     else
         echo 'README does not exist!!'
     fi
+}
+
+copyit() {
+    cat $1 | pbcopy && echo 'Copied To Clipboard'
 }
