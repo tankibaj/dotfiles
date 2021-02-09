@@ -103,7 +103,7 @@ alias vssh="vagrant ssh"
 alias up="vagrant up"
 alias suspend="vagrant suspend"
 alias resume="vagrant resume"
-alias destroy="vagrant destroy"
+# alias destroy="vagrant destroy"
 alias reload="vagrant reload"
 alias reloadp="vagrant reload --provision"
 alias halt="vagrant halt"
@@ -128,6 +128,16 @@ alias ydl-audio='cd ~/Downloads && youtube-dl --ignore-errors --output "%(title)
 
 # Markdown
 alias toc='gh-md-toc'
+
+# Terraform
+alias fmt='terraform fmt'
+alias validate='terraform validate'
+alias plan='terraform plan'
+alias apply='terraform apply'
+alias state='terraform state'
+alias show='terraform show'
+alias workspace='terraform workspace'
+
 
 
 #### Basic function ####
@@ -168,4 +178,15 @@ codeBlockBash() {
 
 copyit() {
     cat $1 | pbcopy && echo 'Copied To Clipboard'
+}
+
+
+destroy() {
+    if [ -e .vagrant ]; then
+        vagrant destroy
+    elif [ -e .terraform ]; then
+        terraform destroy
+    else
+        echo "This action isn't allowed to run in this directory"
+    fi
 }
