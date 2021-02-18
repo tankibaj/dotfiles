@@ -192,5 +192,5 @@ destroy() {
 }
 
 whoisip() {
-	curl -s http://ip-api.com/json/$1 | jq -r '.'
+    curl -s http://ip-api.com/json/$1 | jq -r '.'
 }
