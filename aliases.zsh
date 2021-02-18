@@ -4,7 +4,7 @@ alias copy-ssh-key="cat ~/.ssh/id_rsa.pub | pbcopy && echo 'SSH Public Key Copie
 alias fdns="sudo dscacheutil -flushcache && sudo killall -HUP mDNSResponder && echo 'DSN Flushed'"
 alias ssh-config="subl ~/.ssh/config"
 alias myip="curl https://ipecho.net/plain"
-alias whoIsMe="curl -s "http://ifconfig.co/json" | jq -r '.'"
+alias whoisme="curl -s "http://ifconfig.co/json" | jq -r '.'"
 alias ipv6="curl -s ipv6.icanhazip.com"
 alias zshrc='open -a /Applications/Sublime\ Text.app ~/.dotfiles/.zshrc'
 alias aliases='open -a /Applications/Sublime\ Text.app ~/.dotfiles/aliases.zsh'
@@ -189,4 +189,8 @@ destroy() {
     else
         echo "This action isn't allowed to run in this directory"
     fi
+}
+
+whoisip() {
+	curl -s http://ip-api.com/json/$1 | jq -r '.'
 }
