@@ -12,7 +12,7 @@ alias dotfiles="$HOME/.dotfiles"
 alias vagrant="$HOME/vagrant"
 alias terraform="cd $HOME/documents/terraform"
 alias docker="cd $HOME/documents/docker"
-alias tws="cd $HOME/documents/workspace"
+alias workspace="cd $HOME/documents/workspace"
 #[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 
 
@@ -160,7 +160,7 @@ alias plan='terraform plan'
 alias apply='terraform apply'
 alias state='terraform state'
 alias show='terraform show'
-alias workspace='terraform workspace'
+alias tws='terraform workspace'
 #[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 
 
