@@ -129,5 +129,6 @@ if targetOS macos; then
 else
   echo
   echo "[ERROR] This script can be run only on macOS"
+  echo
   exit 1
 fi
