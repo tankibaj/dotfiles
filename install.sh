@@ -67,7 +67,7 @@ installDotfiles() {
   fi
 
   # Clone Dotfiles
-  git clone git@github.com:tankibaj/dotfiles.git $DOTFILES
+  git clone https://github.com/tankibaj/dotfiles.git $DOTFILES
 
   # Backup existing .zshrc before install Oh My Zsh
   cp $HOME/.zshrc $HOME/.zshrc.original
