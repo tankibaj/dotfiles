@@ -66,11 +66,22 @@ installDotfiles() {
     /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
   fi
 
+  # Update Homebrew recipes
+  brew update
+
+  # Install all contents from Brewfile
+  brew bundle install --file=$DOTFILES/Brewfile
+
   # Clone Dotfiles
   git clone https://github.com/tankibaj/dotfiles.git $DOTFILES
 
-  # Backup existing .zshrc before install Oh My Zsh
-  cp $HOME/.zshrc $HOME/.zshrc.original
+  # Backup existing .zshrc or .bashrc before install Oh My Zsh
+  if [[ -e $HOME/.zshrc ]]; then
+    cp $HOME/.zshrc $HOME/.zshrc.original
+  fi
+  if [[ -e $HOME/.bashrc ]]; then
+    cp $HOME/.bashrc $HOME/.bashrc.original
+  fi
 
   # Clone Oh My Zsh
   git clone https://github.com/ohmyzsh/ohmyzsh.git $ZSH
@@ -84,12 +95,6 @@ installDotfiles() {
 
   # Symlinks the .zshrc file from the .dotfiles
   ln -s $DOTFILES/.zshrc $HOME/.zshrc
-
-  # Update Homebrew recipes
-  brew update
-
-  # Install all contents from Brewfile
-  brew bundle install --file=$DOTFILES/Brewfile
 
   # # Set default MySQL root password and auth type.
   # brew services restart mysql
