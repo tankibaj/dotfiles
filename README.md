@@ -1,26 +1,11 @@
-## Install macOS command line tool
+#### Install xCode
 
 ```bash
 xcode-select --install
 ```
 
-## Install dotfile
-
-#### via curl
+#### Install dotfiles
 
 ```bash
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/tankibaj/dotfiles/master/install.sh)"
+curl -fsSL https://raw.githubusercontent.com/tankibaj/dotfiles/main/install.sh | bash
 ```
-
-#### via wget
-
-```bash
-sh -c "$(wget -O- https://raw.githubusercontent.com/tankibaj/dotfiles/master/install.sh)"
-```
-
-
-## Source .zshrc
-
-````
-source $HOME/.zshrc
-````
