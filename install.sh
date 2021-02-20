@@ -61,6 +61,9 @@ installDotfiles() {
     sudo rm -f $HOME/.zshrc
   fi
 
+  # Clone Dotfiles
+  git clone https://github.com/tankibaj/dotfiles.git $DOTFILES
+
   # Check for Homebrew and install if don't have it
   if test ! $(which brew); then
     /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
@@ -71,9 +74,6 @@ installDotfiles() {
 
   # Install all contents from Brewfile
   brew bundle install --file=$DOTFILES/Brewfile
-
-  # Clone Dotfiles
-  git clone https://github.com/tankibaj/dotfiles.git $DOTFILES
 
   # Backup existing .zshrc or .bashrc before install Oh My Zsh
   if [[ -e $HOME/.zshrc ]]; then
