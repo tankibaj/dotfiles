@@ -83,13 +83,13 @@ installDotfiles() {
   git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $ZSH/plugins/zsh-syntax-highlighting
 
   # Symlinks the .zshrc file from the .dotfiles
-  ln -s $HOME/.dotfiles/.zshrc $HOME/.zshrc
+  ln -s DOTFILES/.zshrc $HOME/.zshrc
 
   # Update Homebrew recipes
   brew update
 
   # Install all contents from Brewfile
-  brew bundle install
+  brew bundle install --file=DOTFILES/Brewfile
 
   # # Set default MySQL root password and auth type.
   # brew services restart mysql
