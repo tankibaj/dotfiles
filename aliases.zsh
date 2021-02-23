@@ -9,9 +9,6 @@ alias site="cd $HOME/documents/sites"
 alias snippets="cd $HOME/documents/snippets"
 alias github="cd $HOME/documents/github"
 alias dotfiles="$HOME/.dotfiles"
-alias vagrant="$HOME/vagrant"
-alias terraform="cd $HOME/documents/terraform"
-alias docker="cd $HOME/documents/docker"
 alias workspace="cd $HOME/documents/workspace"
 #[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 
