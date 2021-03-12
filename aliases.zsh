@@ -77,16 +77,17 @@ alias aliases='open -a /Applications/Sublime\ Text.app ~/.dotfiles/aliases.zsh'
 alias zshrc='open -a /Applications/Sublime\ Text.app ~/.dotfiles/.zshrc'
 alias path='open -a /Applications/Sublime\ Text.app ~/.dotfiles/path.zsh'
 alias hosts='open -a /Applications/Sublime\ Text.app /etc/hosts'
-alias ssh-config="subl ~/.ssh/config"
 #[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 
 
 
 #=========================================================================
-#      ---------------| File Editing |---------------
+#      ---------------| Terminal |---------------
 #=========================================================================
 alias terminal-reload='source ~/.dotfiles/.zshrc'
-alias copy-ssh-key="cat ~/.ssh/id_rsa.pub | pbcopy && echo 'SSH Public Key Copied To Clipboard'"
+alias ssh-copy="cat ~/.ssh/id_rsa.pub | pbcopy && echo 'SSH Public Key Copied To Clipboard'"
+alias ssh-config="subl ~/.ssh/config"
+alias ssh-update='ssh-keygen -R'
 
 copyit() {
     cat $1 | pbcopy && echo 'Copied To Clipboard'
