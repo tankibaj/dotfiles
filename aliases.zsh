@@ -313,4 +313,12 @@ function rawurlencode() {
     echo "${encoded}"  # You can either set a return variable (FASTER)
     REPLY="${encoded}" #+or echo the result (EASIER)... or both... :p
 }
+
+jenkinsvalid() {
+    if [ -f $1 ]; then
+        ssh jenkins java -jar jenkins-cli.jar -s http://jenkins.test:8080/ -auth @/home/naim/.jenkins_token declarative-linter < $1
+    else
+        echo "$1 doesn't exist!!"
+    fi
+}
 #[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
