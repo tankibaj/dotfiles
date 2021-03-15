@@ -88,6 +88,7 @@ alias terminal-reload='source ~/.dotfiles/.zshrc'
 alias ssh-copy="cat ~/.ssh/id_rsa.pub | pbcopy && echo 'SSH Public Key Copied To Clipboard'"
 alias ssh-config="subl ~/.ssh/config"
 alias ssh-update='ssh-keygen -R'
+alias vbrestart='sudo "/Library/Application Support/VirtualBox/LaunchDaemons/VirtualBoxStartup.sh" restart'
 
 copyit() {
     cat $1 | pbcopy && echo 'Copied To Clipboard'
