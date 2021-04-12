@@ -132,7 +132,7 @@ alias commit-count='git rev-list --count'
 alias git-remove='rm -rf .git*'
 gls() {
     if [[ $# -eq 1 ]]; then
-        curl -s https://api.github.com/users/tankibaj/repos | jq '.[]|["name: "+.name,"url: "+.html_url,"clone: "+.clone_url,"ssh: "+.ssh_url]'
+        curl -s https://api.github.com/users/$1/repos | jq '.[]|["name: "+.name,"url: "+.html_url,"clone: "+.clone_url,"ssh: "+.ssh_url]'
     else
         echo "Usage: gls <github username>"
     fi
