@@ -39,6 +39,7 @@ brew "nmap"
 #      ---------------| Developer Tools |---------------
 #=========================================================================
 brew "git"
+brew "gh"
 cask "visual-studio-code"
 cask "phpstorm"
 cask "transmit"
