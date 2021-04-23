@@ -96,6 +96,8 @@ installDotfiles() {
   # Symlinks the .zshrc file from the .dotfiles
   ln -s $DOTFILES/.zshrc $HOME/.zshrc
 
+  git config --global core.excludesfile $HOME/.dotfiles/.gitignore
+
   # # Set default MySQL root password and auth type.
   # brew services restart mysql
   # mysql -u root -e "ALTER USER root@localhost IDENTIFIED WITH mysql_native_password BY '123123'; FLUSH PRIVILEGES;"
