@@ -3,40 +3,6 @@
 DOTFILES=$HOME/.dotfiles
 ZSH=$HOME/.oh-my-zsh
 
-targetOS() {
-  local firstTargetOS=$1
-  local secondTargetOS=$2
-  local os=""
-
-  if [[ "$(uname -s)" == "Darwin" ]]; then
-    os="macos"
-  elif [[ "$(uname -s)" == "Linux" ]]; then
-    if [[ -f /etc/issue ]]; then
-      if [[ "$(cat /etc/issue | grep Ubuntu | awk '{ print $1}')" = "Ubuntu" ]]; then
-        os="ubuntu"
-      elif [[ "$(cat /etc/issue | grep Debian | awk '{ print $1}')" = "Debian" ]]; then
-        os="debian"
-      fi
-    fi
-  fi
-
-  if [[ $# = 1 ]]; then
-    if [[ "${firstTargetOS}" == "${os}" ]]; then
-      return 0
-    else
-      return 1
-    fi
-  elif [[ $# = 2 ]]; then
-    if [[ "${firstTargetOS}" == "${os}" || "${secondTargetOS}" == "${os}" ]]; then
-      return 0
-    else
-      return 1
-    fi
-  else
-    return 1
-  fi
-}
-
 installDotfiles() {
   echo
   echo
@@ -96,6 +62,7 @@ installDotfiles() {
   # Symlinks the .zshrc file from the .dotfiles
   ln -s $DOTFILES/.zshrc $HOME/.zshrc
 
+  # Global gitignore
   git config --global core.excludesfile $HOME/.dotfiles/.gitignore
 
   # # Set default MySQL root password and auth type.
@@ -115,7 +82,7 @@ installDotfiles() {
   # mkdir $HOME/Documents/Sites
 }
 
-if targetOS macos; then
+if [[ "$(uname -s)" == "Darwin" ]]; then
   if [[ ! -d $DOTFILES ]]; then
     installDotfiles
   else
