@@ -20,7 +20,7 @@ cask "upic"
 cask "the-unarchiver"
 cask "anydesk"
 cask "tunnelblick"
-cask "google-chrome"
+brew "google-chrome"
 cask "iterm2"
 brew "speedtest"
 brew "iperf3"
@@ -44,15 +44,16 @@ cask "virtualbox"
 cask "virtualbox-extension-pack"
 cask 'vnc-viewer'
 brew "github-markdown-toc"
+brew "brew install watch"
 
-brew "nginx"
-brew "php@7.4"
-brew 'composer'
-brew "mysql"
-brew "memcached"
-brew 'libmemcached'
-brew "node"
-cask "postman"
+# brew "nginx"
+# brew "php@7.4"
+# brew 'composer'
+# brew "mysql"
+# brew "memcached"
+# brew 'libmemcached'
+# brew "node"
+# cask "postman"
 #[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 
 
