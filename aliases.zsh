@@ -130,11 +130,20 @@ alias remoterm='git remote remove'
 alias rremoteren='git remote rename'
 alias commit-count='git rev-list --count'
 alias git-remove='rm -rf .git*'
+
 gls() {
     if [[ $# -eq 1 ]]; then
         curl -s https://api.github.com/users/$1/repos | jq '.[]|["name: "+.name,"url: "+.html_url,"clone: "+.clone_url,"ssh: "+.ssh_url]'
     else
         echo "Usage: gls <github username>"
+    fi
+}
+
+gio() {
+    if [[ $# -eq 2 ]]; then
+        curl https://git.io/ -i -F "url=$1" -F "code=$2"
+    else
+        echo "Usage: gio <url> <code>"
     fi
 }
 
