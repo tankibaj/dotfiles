@@ -58,8 +58,8 @@ cask "boop"
 #=========================================================================
 #      ---------------| DevOps Tools |---------------
 #=========================================================================
-brew "aws-iam-authenticator"
 brew "awscli"
+brew "aws-iam-authenticator"
 brew "terraform"
 brew "kubernetes-cli"
 cask 'vnc-viewer'
