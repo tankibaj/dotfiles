@@ -65,6 +65,10 @@ installDotfiles() {
   # Global gitignore
   git config --global core.excludesfile $HOME/.dotfiles/.gitignore
 
+  # Kubectl and Helm auto-completion
+  helm completion zsh > ~/.helmrc; echo "source ~/.helmrc" >> ~/.zshrc
+  kubectl completion zsh > ~/.kubectlrc; echo "source ~/.kubectlrc" >> ~/.zshrc
+
   # # Set default MySQL root password and auth type.
   # brew services restart mysql
   # mysql -u root -e "ALTER USER root@localhost IDENTIFIED WITH mysql_native_password BY '123123'; FLUSH PRIVILEGES;"

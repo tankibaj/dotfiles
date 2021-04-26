@@ -62,6 +62,8 @@ brew "awscli"
 brew "aws-iam-authenticator"
 brew "terraform"
 brew "kubernetes-cli"
+brew "kubectl"
+brew "helm"
 cask 'vnc-viewer'
 brew "watch"
 brew "packer"
