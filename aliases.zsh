@@ -122,14 +122,16 @@ alias nahto='git reset --hard'
 alias bls='git branch -a'
 alias checkout='git checkout'
 alias checkoutnew='git checkout -b'
-alias branchDel='git branch -D'
+alias brm='git branch -D'
 alias setorigin='git remote set-url origin'
 alias origin='git remote show origin'
 alias rls='git remote -v'
 alias remoterm='git remote remove'
-alias rremoteren='git remote rename'
+alias remoteren='git remote rename'
 alias commit-count='git rev-list --count'
+alias grm='rm -rf .git*'
 alias git-remove='rm -rf .git*'
+alias repo="gh repo"
 
 gls() {
     if [[ $# -eq 1 ]]; then
