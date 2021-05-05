@@ -191,6 +191,30 @@ destroy() {
 #[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 
 #=========================================================================
+#      ---------------| Docker |---------------
+#=========================================================================
+alias dpsa='docker ps -a'
+alias dps='docker ps'
+alias dstart='docker start'
+alias dsa='docker ps -aq | xargs docker stop'
+alias dstop='docker stop'
+alias drma='docker ps -aq | xargs docker rm -f'
+alias drm='docker rm -f'
+alias drmi='docker rmi -f'
+alias drmia='docker images -aq | xargs docker rmi -f'
+alias dit='docker exec -it'
+alias dlogs='docker logs'
+alias di='docker images'
+alias dc='docker-compose'
+alias dcupd='docker-compose up -d'
+alias dcup='docker-compose up'
+alias dcdown='docker-compose down'
+alias dcbuild='docker-compose build'
+alias dins='docker inspect'
+alias dip="docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}'"
+#[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
+
+#=========================================================================
 #      ---------------| Laravel |---------------
 #=========================================================================
 alias artisan='php artisan'
