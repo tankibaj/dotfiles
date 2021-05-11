@@ -132,6 +132,7 @@ alias commit-count='git rev-list --count'
 alias grm='rm -rf .git*'
 alias git-remove='rm -rf .git*'
 alias repo="gh repo"
+alias merge="git merge"
 
 gls() {
     if [[ $# -eq 1 ]]; then
