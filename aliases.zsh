@@ -15,14 +15,18 @@ alias workspace="cd $HOME/documents/workspace"
 #=========================================================================
 #      ---------------| List & Size |---------------
 #=========================================================================
-# alias ls='ls -lhF'
-# alias ls.='ls -lhFa'
-alias ls='exa --long --group --icons --binary'
-alias ls.='exa --long --group --icons --binary --all'
-alias size="du -sh"
-alias tree="exa --tree --icons"
-alias tree.="exa --tree --icons --all"
+if [ -x "$(command -v exa)" ]; then
+    alias ls='exa --long --group --icons --binary'
+    alias ls.='exa --long --group --icons --binary --all'
+    alias tree='exa --tree --icons'
+    alias tree.='exa --tree --icons --all'
+else
+    alias ls='ls -lhF'
+    alias ls.='ls -lhFa'
+    alias tree='tree'
+fi
 alias tree-="tree"
+alias size="du -sh"
 #[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 
 #=========================================================================
