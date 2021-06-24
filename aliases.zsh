@@ -15,9 +15,14 @@ alias workspace="cd $HOME/documents/workspace"
 #=========================================================================
 #      ---------------| List & Size |---------------
 #=========================================================================
-alias ls='ls -lhF'
-alias ls.='ls -lhFa'
+# alias ls='ls -lhF'
+# alias ls.='ls -lhFa'
+alias ls='exa --long --group --icons --binary'
+alias ls.='exa --long --group --icons --binary --all'
 alias size="du -sh"
+alias tree="exa --tree --icons"
+alias tree.="exa --tree --icons --all"
+alias tree-="tree"
 #[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 
 #=========================================================================
@@ -99,14 +104,6 @@ whoisip() {
 #[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 
 #=========================================================================
-#      ---------------| HomeBrew |---------------
-#=========================================================================
-alias app-upgrade='brew upgrade && brew cask upgrade'
-alias cask-list='brew cask list'
-alias cask-upgrade='brew cask upgrade'
-#[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
-
-#=========================================================================
 #      ---------------| Git |---------------
 #=========================================================================
 #alias init='git init'
@@ -159,9 +156,16 @@ alias fmt='terraform fmt'
 alias validate='terraform validate'
 alias plan='terraform plan'
 alias apply='terraform apply'
+alias output='terraform output'
 alias state='terraform state'
 alias show='terraform show'
 alias tws='terraform workspace'
+#[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
+
+#=========================================================================
+#      ---------------| Kubectl |---------------
+#=========================================================================
+alias kctl='kubectl'
 #[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 
 #=========================================================================
@@ -171,7 +175,6 @@ alias vssh="vagrant ssh"
 alias up="vagrant up"
 alias suspend="vagrant suspend"
 alias resume="vagrant resume"
-# alias destroy="vagrant destroy"
 alias reload="vagrant reload"
 alias reloadp="vagrant reload --provision"
 alias halt="vagrant halt"
@@ -216,58 +219,45 @@ alias dip="docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{
 #[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 
 #=========================================================================
-#      ---------------| Laravel |---------------
-#=========================================================================
-alias artisan='php artisan'
-alias lara='composer create-project laravel/laravel'
-alias env='php artisan env'
-alias laraKey='php artisan key:generate'
-alias mf='php artisan migrate:fresh'
-alias mfs='php artisan migrate:fresh --seed'
-alias mrf='php artisan migrate:refresh'
-alias model='php artisan make:model'
-alias controller='php artisan make:controller'
-alias migrate='php artisan migrate'
-alias queue='php artisan queue'
-alias route='php artisan route'
-alias tinker='php artisan tinker'
-alias resource='php artisan nova:resource'
-alias getenv="curl -o .env https://raw.githubusercontent.com/laravel/laravel/master/.env.example"
-alias laraStart="getenv && composer update && laraKey && phps ."
-alias cache-clear='php artisan cache:clear'
-alias cache-optimize='php artisan optimize'
-alias cache-config='php artisan config:cache'
-alias cache-route='php artisan route:cache '
-alias cache-view='php artisan view:cache'
-#[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
-
-#=========================================================================
 #      ---------------| Youtube download |---------------
 #=========================================================================
-alias ydl='cd ~/Downloads && youtube-dl -f bestvideo+bestaudio'
-alias ydl-mp3='cd ~/Downloads && youtube-dl --ignore-errors --output "%(title)s.%(ext)s" --extract-audio --audio-format mp3'
-alias ydl-m4a='cd ~/Downloads && youtube-dl --ignore-errors --output "%(title)s.%(ext)s" --extract-audio --audio-format m4a'
-alias ydl-wav='cd ~/Downloads && youtube-dl --ignore-errors --output "%(title)s.%(ext)s" --extract-audio --audio-format wav'
-alias ydl-aac='cd ~/Downloads && youtube-dl --ignore-errors --output "%(title)s.%(ext)s" --extract-audio --audio-format aac'
-alias ydl-audio='cd ~/Downloads && youtube-dl --ignore-errors --output "%(title)s.%(ext)s" --extract-audio --audio-format best'
-#[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
+ydl() {
+    if [ $# = 2 ]; then
+        path='$HOME/Downloads/%(title)s-%(id)s.%(ext)s'
+        # path='%(title)s.%(ext)s'
+        back="&& cd -"
+        case $1 in
+        mp3) youtube-dl --ignore-errors --output $path --extract-audio --audio-format mp3 $2 ;;
+        m4a) youtube-dl --ignore-errors --output $path --extract-audio --audio-format m4a $2 ;;
+        wav) youtube-dl --ignore-errors --output $path --extract-audio --audio-format wav $2 ;;
+        aac) youtube-dl --ignore-errors --output $path --extract-audio --audio-format aac $2 ;;
+        audio) youtube-dl --ignore-errors --output $path --extract-audio --audio-format best $2 ;;
+        video) youtube-dl -f bestvideo+bestaudio --output $path $2 ;;
+        playlist) youtube-dl -f bestvideo+bestaudio --yes-playlist --output $path $2 ;;
+        *) echo "Usage: ydl audio url" ;;
+        esac
+    else
 
-#=========================================================================
-#      ---------------| Nginx |---------------
-#=========================================================================
-alias nginxError='tail -n 100 /usr/local/var/log/nginx/error.log'
+        local -r flagsTable=$(
+            printf "%s\n" \
+                "ydl video youtube-url      Download audio and video with best quality" \
+                "ydl audio youtube-url      Download only audio" \
+                "ydl playlist youtube-url   Download playlist" \
+                "ydl mp3 youtube-url        Download only audio in mp3 format" \
+                "ydl m4a youtube-url        Download only audio in m4a format" \
+                "ydl wav youtube-url        Download only audio in wav format" \
+                "ydl aac youtube-url        Download only audio in aac format"
+
+        )
+        echo -e "$flagsTable"
+    fi
+}
 #[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 
 #=========================================================================
 #      ---------------| Markdown |---------------
 #=========================================================================
 alias toc='gh-md-toc'
-#[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
-
-#=========================================================================
-#      ---------------| Composer |---------------
-#=========================================================================
-alias autodump='composer dump-autoload'
 #[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 
 #=========================================================================
