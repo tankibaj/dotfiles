@@ -33,6 +33,8 @@ installDotfiles() {
   # Check for Homebrew and install if don't have it
   if test ! $(which brew); then
     /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+    echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> $HOME/.zprofile
+    eval "$(/opt/homebrew/bin/brew shellenv)"
   fi
 
   # Update Homebrew recipes
