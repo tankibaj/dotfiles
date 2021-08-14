@@ -5,9 +5,10 @@ alias ~="cd $HOME"
 alias doc="cd $HOME/documents"
 alias dl="cd $HOME/downloads"
 alias app="cd /applications"
-alias site="cd $HOME/documents/sites"
-alias snippets="cd $HOME/documents/snippets"
-alias github="cd $HOME/documents/github"
+alias site="cd $HOME/documents/workspace/sites"
+alias snippets="cd $HOME/documents/workspace/snippets"
+alias github="cd $HOME/documents/workspace/github"
+alias gitlab="cd $HOME/documents/workspace/gitlab"
 alias dotfiles="$HOME/.dotfiles"
 alias workspace="cd $HOME/documents/workspace"
 #[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
@@ -41,10 +42,11 @@ alias ln='ln -iv'
 #=========================================================================
 #      ---------------| Open Application |---------------
 #=========================================================================
-alias subl="open -a /Applications/Sublime\ Text.app ./"
-alias phps='open -a PhpStorm ./'
-alias vsc='open -a /Applications/Visual\ Studio\ Code.app ./'
-alias typora='open -a /Applications/Typora.app ./'
+alias subl="open -a /Applications/Sublime\ Text.app"
+alias phps='open -a PhpStorm'
+alias idea="open -a IntelliJ\ IDEA"
+alias vsc='open -a /Applications/Visual\ Studio\ Code.app'
+alias typora='open -a /Applications/Typora.app'
 
 # Open Chrome from the command line.
 function chrome() {
@@ -84,9 +86,10 @@ alias hosts='open -a /Applications/Sublime\ Text.app /etc/hosts'
 #      ---------------| Terminal |---------------
 #=========================================================================
 alias terminal-reload='source ~/.dotfiles/.zshrc'
-alias ssh-copy="cat ~/.ssh/id_rsa.pub | pbcopy && echo 'SSH Public Key Copied To Clipboard'"
-alias ssh-config="subl ~/.ssh/config"
-alias ssh-update='ssh-keygen -R'
+alias sshkey="cat ~/.ssh/id_rsa.pub | pbcopy && echo 'SSH Public Key Copied To Clipboard'"
+alias sshconfig="vim ~/.ssh/config"
+alias sshupdate='ssh-keygen -R'
+alias sshls="grep '^Host' $HOME/.ssh/config | sed 's/Host //' | sort -u"
 alias vbrestart='sudo "/Library/Application Support/VirtualBox/LaunchDaemons/VirtualBoxStartup.sh" restart'
 
 copyit() {
@@ -131,7 +134,6 @@ alias remoterm='git remote remove'
 alias remoteren='git remote rename'
 alias commit-count='git rev-list --count'
 alias grm='rm -rf .git*'
-alias git-remove='rm -rf .git*'
 alias repo="gh repo"
 alias merge="git merge"
 
