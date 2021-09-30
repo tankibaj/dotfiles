@@ -159,9 +159,9 @@ gio() {
 #      ---------------| Terraform |---------------
 #=========================================================================
 alias tinit='terraform init'
-alias fmt='terraform fmt -check'
+alias fmt='terraform fmt'
 alias validate='terraform validate'
-alias plan='terraform fmt -check && terraform validate && terraform plan'
+alias plan='terraform fmt && terraform validate && terraform plan'
 alias apply='terraform apply'
 alias output='terraform output'
 alias state='terraform state'
