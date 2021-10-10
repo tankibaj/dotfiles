@@ -3,31 +3,6 @@
 DOTFILES=$HOME/.dotfiles
 ZSH=$HOME/.oh-my-zsh
 
-if [[ "$(uname -s)" == "Darwin" ]]; then
-  if [[ ! -d $DOTFILES ]]; then
-    installDotfiles
-  else
-    echo
-    read -p "[INFO] Dotfiles already installed. Do you want to reinstall? [y/N]: " confirmation
-    echo
-    until [[ "$confirmation" =~ ^[yYnN]*$ ]]; do
-      echo
-      echo "[ERROR] invalid selection."
-      echo
-      read -p "[INFO] Dotfiles already installed. Do you want to reinstall? [y/N]: " confirmation
-      echo
-    done
-    if [[ "$confirmation" =~ ^[yY]$ ]]; then
-      installDotfiles
-    fi
-  fi
-else
-  echo
-  echo "[ERROR] This script can be run only on macOS"
-  echo
-  exit 1
-fi
-
 installDotfiles() {
   echo
   echo
@@ -74,7 +49,6 @@ brewBundle() {
 }
 
 cleaUp() {
-
   if [[ -d $DOTFILES ]]; then
     sudo rm -rf $DOTFILES
   fi
@@ -91,3 +65,28 @@ cleaUp() {
     sudo rm -f $HOME/.zshrc
   fi
 }
+
+if [[ "$(uname -s)" == "Darwin" ]]; then
+  if [[ ! -d $DOTFILES ]]; then
+    installDotfiles
+  else
+    echo
+    read -p "[INFO] Dotfiles already installed. Do you want to reinstall? [y/N]: " confirmation
+    echo
+    until [[ "$confirmation" =~ ^[yYnN]*$ ]]; do
+      echo
+      echo "[ERROR] invalid selection."
+      echo
+      read -p "[INFO] Dotfiles already installed. Do you want to reinstall? [y/N]: " confirmation
+      echo
+    done
+    if [[ "$confirmation" =~ ^[yY]$ ]]; then
+      installDotfiles
+    fi
+  fi
+else
+  echo
+  echo "[ERROR] This script can be run only on macOS"
+  echo
+  exit 1
+fi
