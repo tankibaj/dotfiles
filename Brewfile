@@ -33,15 +33,15 @@ cask "pdf-squeezer"
 #=========================================================================
 brew "git"
 brew "gh"
-cask "visual-studio-code"
-cask "phpstorm"
+# cask "visual-studio-code"
+# cask "phpstorm"
 cask "transmit"
-cask "vagrant"
-cask "virtualbox"
-cask "virtualbox-extension-pack"
+# cask "vagrant"
+# cask "virtualbox"
+# cask "virtualbox-extension-pack"
 brew "github-markdown-toc"
-brew "hugo"
-cask "boop"
+# brew "hugo"
+# cask "boop"
 
 
 # brew "nginx"
@@ -66,7 +66,7 @@ brew "kubectl"
 brew "helm"
 cask 'vnc-viewer'
 brew "watch"
-brew "packer"
+# brew "packer"
 brew "stern"
 brew "asciinema"
 cask "microsoft-remote-desktop"
@@ -98,10 +98,10 @@ brew "exa"
 #=========================================================================
 #      ---------------| Messaging |---------------
 #=========================================================================
-cask "skype"
+# cask "skype"
 cask "whatsapp"
 cask "messenger"
-cask "slack"
+# cask "slack"
 #[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 
 
@@ -151,5 +151,6 @@ cask "font-ubuntu-mono-derivative-powerline"
 #=========================================================================
 mas "Magnet", id: 441258766
 mas "SnippetsLab", id: 1006087419
-mas "Namecheap VPN", id: 1419729466
+mas "Namecheap FastVPN", id: 1419729466
+mas "Amphetamine", id: 937984704
 #[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
