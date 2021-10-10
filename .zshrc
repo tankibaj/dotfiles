@@ -105,7 +105,6 @@ plugins=(
     copyfile
     history
     alias-finder
-    zsh_reload
     )
 
 ZSH_DISABLE_COMPFIX="true"
