@@ -86,7 +86,7 @@ alias hosts='open -a /Applications/Sublime\ Text.app /etc/hosts'
 #      ---------------| Terminal |---------------
 #=========================================================================
 alias terminal-reload='source ~/.dotfiles/.zshrc'
-alias sshkey="cat ~/.ssh/id_rsa.pub | pbcopy && echo 'SSH Public Key Copied To Clipboard'"
+alias sshkey="cat ~/.ssh/id_ed25519.pub | pbcopy && echo 'SSH Public Key Copied To Clipboard'"
 alias sshconfig="vim ~/.ssh/config"
 alias sshupdate='ssh-keygen -R'
 alias sshls="grep '^Host' $HOME/.ssh/config | sed 's/Host //' | sort -u"
