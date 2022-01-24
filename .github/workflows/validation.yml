@@ -32,4 +32,4 @@ jobs:
 
     # Install dotfiles
     - name: Install dotfiles
-      run: ./install.sh
+      run: ./install
