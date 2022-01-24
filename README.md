@@ -13,5 +13,5 @@ The easiest way to install xCode is the command line. Type `xcode-select --insta
 ### Install dotfiles
 
 ```bash
-bash -c "$(curl -fsSL https://raw.githubusercontent.com/tankibaj/dotfiles/main/install.sh)"
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/tankibaj/dotfiles/main/install)"
 ```
