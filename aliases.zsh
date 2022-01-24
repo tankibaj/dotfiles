@@ -2,6 +2,7 @@
 #      ---------------| Directories |---------------
 #=========================================================================
 alias ~="cd $HOME"
+alias dotfiles="$HOME/.dotfiles"
 alias doc="cd $HOME/documents"
 alias dl="cd $HOME/downloads"
 alias app="cd /applications"
@@ -9,7 +10,6 @@ alias site="cd $HOME/documents/workspace/sites"
 alias snippets="cd $HOME/documents/workspace/snippets"
 alias github="cd $HOME/documents/workspace/github"
 alias gitlab="cd $HOME/documents/workspace/gitlab"
-alias dotfiles="$HOME/.dotfiles"
 alias workspace="cd $HOME/documents/workspace"
 #[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 
@@ -43,7 +43,6 @@ alias ln='ln -iv'
 #      ---------------| Open Application |---------------
 #=========================================================================
 alias subl="open -a /Applications/Sublime\ Text.app"
-alias phps='open -a PhpStorm'
 alias idea="open -a IntelliJ\ IDEA"
 alias vsc='open -a /Applications/Visual\ Studio\ Code.app'
 alias typora='open -a /Applications/Typora.app'
@@ -76,9 +75,9 @@ function google() {
 #=========================================================================
 #      ---------------| File Editing |---------------
 #=========================================================================
-alias aliases='open -a /Applications/Sublime\ Text.app ~/.dotfiles/aliases.zsh'
+alias aliases='open -a /Applications/Sublime\ Text.app ~/.dotfiles/alias'
 alias zshrc='open -a /Applications/Sublime\ Text.app ~/.dotfiles/.zshrc'
-alias path='open -a /Applications/Sublime\ Text.app ~/.dotfiles/path.zsh'
+alias path='open -a /Applications/Sublime\ Text.app ~/.dotfiles/path'
 alias hosts='open -a /Applications/Sublime\ Text.app /etc/hosts'
 #[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 
@@ -86,14 +85,21 @@ alias hosts='open -a /Applications/Sublime\ Text.app /etc/hosts'
 #      ---------------| Terminal |---------------
 #=========================================================================
 alias terminal-reload='source ~/.dotfiles/.zshrc'
-alias sshkey="cat ~/.ssh/id_ed25519.pub | pbcopy && echo 'SSH Public Key Copied To Clipboard'"
-alias sshconfig="vim ~/.ssh/config"
-alias sshupdate='ssh-keygen -R'
-alias sshls="grep '^Host' $HOME/.ssh/config | sed 's/Host //' | sort -u"
 alias vbrestart='sudo "/Library/Application Support/VirtualBox/LaunchDaemons/VirtualBoxStartup.sh" restart'
 
 copyit() {
     cat $1 | pbcopy && echo 'Copied To Clipboard'
+}
+#[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
+
+#=========================================================================
+#      ---------------| SSH |---------------
+#=========================================================================
+alias sshconfig="vim ~/.ssh/config"
+alias sshupdate='ssh-keygen -R'
+alias sshls="grep '^Host' $HOME/.ssh/config | sed 's/Host //' | sort -u"
+sshkey() {
+    cat ~/.ssh/$1.pub | pbcopy && echo "$1 public was copied to clipboard"
 }
 #[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 
@@ -113,7 +119,6 @@ whoisip() {
 #=========================================================================
 #      ---------------| Git |---------------
 #=========================================================================
-#alias init='git init'
 alias clone='git clone'
 alias add='git add .'
 alias commit='git commit -m'

@@ -15,10 +15,7 @@ tap "teamookla/speedtest"
 #      ---------------| Productivity |---------------
 #=========================================================================
 cask "notion"
-cask "upic"
 cask "the-unarchiver"
-cask "anydesk"
-cask "tunnelblick"
 cask "google-chrome"
 cask "iterm2"
 brew "speedtest"
@@ -41,17 +38,7 @@ cask "transmit"
 # cask "virtualbox-extension-pack"
 brew "github-markdown-toc"
 # brew "hugo"
-# cask "boop"
-
-
-# brew "nginx"
-# brew "php@7.4"
-# brew 'composer'
-# brew "mysql"
-# brew "memcached"
-# brew 'libmemcached'
-# brew "node"
-# cask "postman"
+cask "boop"
 #[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 
 
@@ -66,7 +53,6 @@ brew "kubectl"
 brew "helm"
 cask 'vnc-viewer'
 brew "watch"
-# brew "packer"
 brew "stern"
 brew "asciinema"
 cask "microsoft-remote-desktop"
@@ -84,7 +70,6 @@ brew "java"
 brew "openjdk"
 brew "glib"
 brew "curl"
-brew "dnsmasq"
 brew "ffmpeg"
 brew "wget"
 brew "youtube-dl"
@@ -99,8 +84,8 @@ brew "exa"
 #      ---------------| Messaging |---------------
 #=========================================================================
 # cask "skype"
-cask "whatsapp"
-cask "messenger"
+# cask "whatsapp"
+# cask "messenger"
 # cask "slack"
 #[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 
@@ -153,4 +138,6 @@ mas "Magnet", id: 441258766
 mas "SnippetsLab", id: 1006087419
 mas "Namecheap FastVPN", id: 1419729466
 mas "Amphetamine", id: 937984704
+mas "Strongbox", id: 1270075435
+mas "iA Writer", id: 775737590
 #[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
