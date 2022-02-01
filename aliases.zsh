@@ -17,14 +17,14 @@ alias workspace="cd $HOME/documents/workspace"
 #      ---------------| List & Size |---------------
 #=========================================================================
 if [ -x "$(command -v exa)" ]; then
-    alias ls='exa --long --group --icons --binary'
-    alias ls.='exa --long --group --icons --binary --all'
-    alias tree='exa --tree --icons'
-    alias tree.='exa --tree --icons --all'
+  alias ls='exa --long --group --icons --binary'
+  alias ls.='exa --long --group --icons --binary --all'
+  alias tree='exa --tree --icons'
+  alias tree.='exa --tree --icons --all'
 else
-    alias ls='ls -lhF'
-    alias ls.='ls -lhFa'
-    alias tree='tree'
+  alias ls='ls -lhF'
+  alias ls.='ls -lhFa'
+  alias tree='tree'
 fi
 alias tree-="tree"
 alias size="du -sh"
@@ -64,7 +64,16 @@ alias terminal-reload='source ~/.dotfiles/.zshrc'
 alias vbrestart='sudo "/Library/Application Support/VirtualBox/LaunchDaemons/VirtualBoxStartup.sh" restart'
 
 copyit() {
-    cat $1 | pbcopy && echo 'Copied to clipboard'
+  cat $1 | pbcopy && echo 'Copied to clipboard'
+}
+
+# See all paths, one element per line. If an argument is supplied, grep fot it.
+pathls() {
+  test -n "$1" && {
+    echo $PATH | perl -p -e "s/:/\n/g;" | grep -i "$1"
+  } || {
+    echo $PATH | perl -p -e "s/:/\n/g;"
+  }
 }
 #[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 
@@ -72,11 +81,25 @@ copyit() {
 #      ---------------| SSH |---------------
 #=========================================================================
 alias sshconfig="vim ~/.ssh/config"
-alias sshupdate='ssh-keygen -R'
+alias sshclr='ssh-keygen -R'
 alias sshls="grep '^Host' $HOME/.ssh/config | sed 's/Host //' | sort -u"
 
 sshid() {
-    cat ~/.ssh/$1.pub | pbcopy && echo "$1 public was copied to clipboard"
+  cat ~/.ssh/$1.pub | pbcopy && echo "$1 public was copied to clipboard"
+}
+
+ssh-id-ls() {
+  for file in ~/.ssh/*.pub; do
+    printf "%s %s\n" "$(ssh-keygen -lf "$file" | awk '{$1=""}1')" "$file"
+  done | column -t | grep --color=auto "$line" || echo "$line"
+}
+
+ssh-add-ls() {
+  while read -r line; do
+    for file in ~/.ssh/*.pub; do
+      printf "%s %s\n" "$(ssh-keygen -lf "$file" | awk '{$1=""}1')" "$file"
+    done | column -t | grep --color=auto "$line" || echo "$line"
+  done < <(ssh-add -l | awk '{print $2}')
 }
 #[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 
@@ -89,7 +112,17 @@ alias whoisme="curl -s "http://ifconfig.co/json" | jq -r '.'"
 alias ipv6="curl -s ipv6.icanhazip.com"
 
 whoisip() {
-    curl -s http://ip-api.com/json/$1 | jq -r '.'
+  curl -s http://ip-api.com/json/$1 | jq -r '.'
+}
+
+listening() {
+  if [ $# -eq 0 ]; then
+    sudo lsof -i -P | grep LISTEN
+  elif [ $# -eq 1 ]; then
+    sudo lsof -i -P | grep LISTEN | grep -i --color=auto $1
+  else
+    echo "Usage: listening [port/appname]"
+  fi
 }
 #[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 
@@ -120,19 +153,19 @@ alias repo="gh repo"
 alias merge="git merge"
 
 gls() {
-    if [[ $# -eq 1 ]]; then
-        curl -s https://api.github.com/users/$1/repos | jq '.[]|["name: "+.name,"url: "+.html_url,"clone: "+.clone_url,"ssh: "+.ssh_url]'
-    else
-        echo "Usage: gls <github username>"
-    fi
+  if [[ $# -eq 1 ]]; then
+    curl -s https://api.github.com/users/$1/repos | jq '.[]|["name: "+.name,"url: "+.html_url,"clone: "+.clone_url,"ssh: "+.ssh_url]'
+  else
+    echo "Usage: gls <github username>"
+  fi
 }
 
 gio() {
-    if [[ $# -eq 2 ]]; then
-        curl https://git.io/ -i -F "url=$1" -F "code=$2"
-    else
-        echo "Usage: gio <url> <code>"
-    fi
+  if [[ $# -eq 2 ]]; then
+    curl https://git.io/ -i -F "url=$1" -F "code=$2"
+  else
+    echo "Usage: gio <url> <code>"
+  fi
 }
 #[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 
@@ -172,13 +205,13 @@ alias box-remove='vagrant box remove'
 alias box-add='vagrant box add'
 
 destroy() {
-    if [ -e .vagrant ]; then
-        vagrant destroy
-    elif [ -e .terraform ]; then
-        terraform destroy
-    else
-        echo "This action isn't allowed to run in this directory"
-    fi
+  if [ -e .vagrant ]; then
+    vagrant destroy
+  elif [ -e .terraform ]; then
+    terraform destroy
+  else
+    echo "This action isn't allowed to run in this directory"
+  fi
 }
 #[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 
@@ -211,35 +244,35 @@ alias dip="docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{
 #      ---------------| Youtube download |---------------
 #=========================================================================
 ydl() {
-    if [ $# = 2 ]; then
-        path='$HOME/Downloads/%(title)s-%(id)s.%(ext)s'
-        # path='%(title)s.%(ext)s'
-        back="&& cd -"
-        case $1 in
-        mp3) youtube-dl --ignore-errors --output $path --extract-audio --audio-format mp3 $2 ;;
-        m4a) youtube-dl --ignore-errors --output $path --extract-audio --audio-format m4a $2 ;;
-        wav) youtube-dl --ignore-errors --output $path --extract-audio --audio-format wav $2 ;;
-        aac) youtube-dl --ignore-errors --output $path --extract-audio --audio-format aac $2 ;;
-        audio) youtube-dl --ignore-errors --output $path --extract-audio --audio-format best $2 ;;
-        video) youtube-dl -f bestvideo+bestaudio --output $path $2 ;;
-        playlist) youtube-dl -f bestvideo+bestaudio --yes-playlist --output $path $2 ;;
-        *) echo "Usage: ydl audio url" ;;
-        esac
-    else
+  if [ $# = 2 ]; then
+    path='$HOME/Downloads/%(title)s-%(id)s.%(ext)s'
+    # path='%(title)s.%(ext)s'
+    back="&& cd -"
+    case $1 in
+    mp3) youtube-dl --ignore-errors --output $path --extract-audio --audio-format mp3 $2 ;;
+    m4a) youtube-dl --ignore-errors --output $path --extract-audio --audio-format m4a $2 ;;
+    wav) youtube-dl --ignore-errors --output $path --extract-audio --audio-format wav $2 ;;
+    aac) youtube-dl --ignore-errors --output $path --extract-audio --audio-format aac $2 ;;
+    audio) youtube-dl --ignore-errors --output $path --extract-audio --audio-format best $2 ;;
+    video) youtube-dl -f bestvideo+bestaudio --output $path $2 ;;
+    playlist) youtube-dl -f bestvideo+bestaudio --yes-playlist --output $path $2 ;;
+    *) echo "Usage: ydl audio url" ;;
+    esac
+  else
 
-        local -r flagsTable=$(
-            printf "%s\n" \
-                "ydl video youtube-url      Download audio and video with best quality" \
-                "ydl audio youtube-url      Download only audio" \
-                "ydl playlist youtube-url   Download playlist" \
-                "ydl mp3 youtube-url        Download only audio in mp3 format" \
-                "ydl m4a youtube-url        Download only audio in m4a format" \
-                "ydl wav youtube-url        Download only audio in wav format" \
-                "ydl aac youtube-url        Download only audio in aac format"
+    local -r flagsTable=$(
+      printf "%s\n" \
+        "ydl video youtube-url      Download audio and video with best quality" \
+        "ydl audio youtube-url      Download only audio" \
+        "ydl playlist youtube-url   Download playlist" \
+        "ydl mp3 youtube-url        Download only audio in mp3 format" \
+        "ydl m4a youtube-url        Download only audio in m4a format" \
+        "ydl wav youtube-url        Download only audio in wav format" \
+        "ydl aac youtube-url        Download only audio in aac format"
 
-        )
-        echo -e "$flagsTable"
-    fi
+    )
+    echo -e "$flagsTable"
+  fi
 }
 #[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 
@@ -247,28 +280,4 @@ ydl() {
 #      ---------------| Markdown |---------------
 #=========================================================================
 alias toc='gh-md-toc'
-#[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
-
-#=========================================================================
-#      ---------------|  Others Function |---------------
-#=========================================================================
-
-# See all paths, one element per line. If an argument is supplied, grep fot it.
-path() {
-    test -n "$1" && {
-        echo $PATH | perl -p -e "s/:/\n/g;" | grep -i "$1"
-    } || {
-        echo $PATH | perl -p -e "s/:/\n/g;"
-    }
-}
-
-listening() {
-    if [ $# -eq 0 ]; then
-        sudo lsof -i -P | grep LISTEN
-    elif [ $# -eq 1 ]; then
-        sudo lsof -i -P | grep LISTEN | grep -i --color=auto $1
-    else
-        echo "Usage: listening [port/appname]"
-    fi
-}
 #[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
