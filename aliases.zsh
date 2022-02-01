@@ -46,39 +46,15 @@ alias subl="open -a /Applications/Sublime\ Text.app"
 alias idea="open -a IntelliJ\ IDEA"
 alias vsc='open -a /Applications/Visual\ Studio\ Code.app'
 alias typora='open -a /Applications/Typora.app'
-
-# Open Chrome from the command line.
-function chrome() {
-    URL=$1
-    if [[ $1 != http* ]]; then
-        URL="http://$1"
-    fi
-    /usr/bin/open -a '/Applications/Google Chrome.app' "$URL"
-}
-
-# Open Safari from the command line.
-function safari() {
-    URL=$1
-    if [[ $1 != http* ]]; then
-        URL="http://$1"
-    fi
-    /usr/bin/open -a '/Applications/Safari.app' "$URL"
-}
-
-# Google things from the command line.
-function google() {
-    QUERY=$(rawurlencode "$*")
-    chrome "https://www.google.com/search?client=safari&rls=en&q=$QUERY&ie=UTF-8&oe=UTF-8"
-}
 #[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 
 #=========================================================================
 #      ---------------| File Editing |---------------
 #=========================================================================
-alias aliases='open -a /Applications/Sublime\ Text.app ~/.dotfiles/alias'
-alias zshrc='open -a /Applications/Sublime\ Text.app ~/.dotfiles/.zshrc'
-alias path='open -a /Applications/Sublime\ Text.app ~/.dotfiles/path'
-alias hosts='open -a /Applications/Sublime\ Text.app /etc/hosts'
+alias edit-aliases='open -a /Applications/Sublime\ Text.app ~/.dotfiles/aliases.zsh'
+alias edit-zshrc='open -a /Applications/Sublime\ Text.app ~/.dotfiles/.zshrc'
+alias edit-path='open -a /Applications/Sublime\ Text.app ~/.dotfiles/path.zsh'
+alias edit-hosts='open -a /Applications/Sublime\ Text.app /etc/hosts'
 #[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 
 #=========================================================================
@@ -88,7 +64,7 @@ alias terminal-reload='source ~/.dotfiles/.zshrc'
 alias vbrestart='sudo "/Library/Application Support/VirtualBox/LaunchDaemons/VirtualBoxStartup.sh" restart'
 
 copyit() {
-    cat $1 | pbcopy && echo 'Copied To Clipboard'
+    cat $1 | pbcopy && echo 'Copied to clipboard'
 }
 #[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 
@@ -98,7 +74,8 @@ copyit() {
 alias sshconfig="vim ~/.ssh/config"
 alias sshupdate='ssh-keygen -R'
 alias sshls="grep '^Host' $HOME/.ssh/config | sed 's/Host //' | sort -u"
-sshkey() {
+
+sshid() {
     cat ~/.ssh/$1.pub | pbcopy && echo "$1 public was copied to clipboard"
 }
 #[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
@@ -157,7 +134,6 @@ gio() {
         echo "Usage: gio <url> <code>"
     fi
 }
-
 #[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 
 #=========================================================================
@@ -209,6 +185,7 @@ destroy() {
 #=========================================================================
 #      ---------------| Docker |---------------
 #=========================================================================
+alias dls='docker container list --all --format "table {{.ID}}\t{{.Image}}\t{{.Names}}\t{{.Status}}\t{{.Ports}}"'
 alias dpsa='docker ps -a'
 alias dps='docker ps'
 alias dstart='docker start'
@@ -277,7 +254,7 @@ alias toc='gh-md-toc'
 #=========================================================================
 
 # See all paths, one element per line. If an argument is supplied, grep fot it.
-PATH() {
+path() {
     test -n "$1" && {
         echo $PATH | perl -p -e "s/:/\n/g;" | grep -i "$1"
     } || {
@@ -285,54 +262,13 @@ PATH() {
     }
 }
 
-gettingStarted() {
-    if [ -e GettingStarted.txt ]; then
-        egrep '^\s+\$' GettingStarted.txt | sed -e 's@\$@@'
+listening() {
+    if [ $# -eq 0 ]; then
+        sudo lsof -i -P | grep LISTEN
+    elif [ $# -eq 1 ]; then
+        sudo lsof -i -P | grep LISTEN | grep -i --color=auto $1
     else
-        echo 'GettingStarted does not exist!!'
-    fi
-}
-
-codeBlock() {
-    if [ -e README.md ]; then
-        sed -n '/^```/,/^```/ p' <README.md | sed '/^```/ d'
-    else
-        echo 'README does not exist!!'
-    fi
-}
-
-codeBlockBash() {
-    if [ -e README.md ]; then
-        sed -n '/^```bash/,/^```/ p' <README.md | sed '/^```/ d'
-    else
-        echo 'README does not exist!!'
-    fi
-}
-
-# URL encoding function taken from https://stackoverflow.com/a/10660730
-function rawurlencode() {
-    local string="${1}"
-    local strlen=${#string}
-    local encoded=""
-    local pos c o
-
-    for ((pos = 0; pos < strlen; pos++)); do
-        c=${string:$pos:1}
-        case "$c" in
-        [-_.~a-zA-Z0-9]) o="${c}" ;;
-        *) printf -v o '%%%02x' "'$c" ;;
-        esac
-        encoded+="${o}"
-    done
-    echo "${encoded}"  # You can either set a return variable (FASTER)
-    REPLY="${encoded}" #+or echo the result (EASIER)... or both... :p
-}
-
-jenkinsvalid() {
-    if [ -f $1 ]; then
-        ssh jenkins java -jar jenkins-cli.jar -s http://jenkins.test:8080/ -auth @/home/naim/.jenkins_token declarative-linter <$1
-    else
-        echo "$1 doesn't exist!!"
+        echo "Usage: listening [port/appname]"
     fi
 }
 #[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
