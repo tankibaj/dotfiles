@@ -101,6 +101,14 @@ ssh-add-ls() {
     done | column -t | grep --color=auto "$line" || echo "$line"
   done < <(ssh-add -l | awk '{print $2}')
 }
+
+rcp() {
+  if [[ $# -eq 2 ]]; then
+    rsync -avzh --stats --progress $1 $2
+  else
+    echo "Usage: rcp <source> <destination>"
+  fi
+}
 #[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 
 #=========================================================================
