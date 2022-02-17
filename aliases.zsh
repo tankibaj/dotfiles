@@ -109,6 +109,14 @@ rcp() {
     echo "Usage: rcp <source> <destination>"
   fi
 }
+
+rdl() {
+  if [[ $# -eq 1 ]]; then
+    rsync -avzh --stats --progress $1 ~/downloads
+  else
+    echo "Usage: rdl <source>"
+  fi
+}
 #[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 
 #=========================================================================
