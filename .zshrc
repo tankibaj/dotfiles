@@ -101,7 +101,7 @@ plugins=(
     ansible
     python
     npm
-    copydir
+    copypath
     copyfile
     history
     alias-finder
