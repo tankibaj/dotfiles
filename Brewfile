@@ -25,22 +25,6 @@ cask "pdf-squeezer"
 #[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 
 
-#=========================================================================
-#      ---------------| Developer Tools |---------------
-#=========================================================================
-brew "git"
-brew "gh"
-# cask "visual-studio-code"
-# cask "phpstorm"
-cask "transmit"
-# cask "vagrant"
-# cask "virtualbox"
-# cask "virtualbox-extension-pack"
-brew "github-markdown-toc"
-# brew "hugo"
-cask "boop"
-#[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
-
 
 #=========================================================================
 #      ---------------| DevOps Tools |---------------
@@ -48,14 +32,19 @@ cask "boop"
 brew "awscli"
 brew "aws-iam-authenticator"
 brew "terraform"
-brew "kubernetes-cli"
 brew "kubectl"
+brew "kubectx"
 brew "helm"
 cask 'vnc-viewer'
 brew "watch"
 brew "stern"
 brew "asciinema"
 cask "microsoft-remote-desktop"
+brew "git"
+brew "gh"
+cask "transmit"
+brew "github-markdown-toc"
+cask "boop"
 #[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 
 
