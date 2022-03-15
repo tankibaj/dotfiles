@@ -206,6 +206,14 @@ alias kctl='kubectl'
 alias k='kubectl'
 alias kx='kubectx'
 alias kns='kubens'
+klogs() {
+  if [[ $# -eq 2 ]]; then
+    kubectl logs -f -n $1 $(kubectl get po -n $1 | egrep -o "$2[a-zA-Z0-9-]+")
+  else
+    echo "Usage: klogs <namespace> <pod prefix>"
+    echo "Example: klogs <kube-system> <aws-load-balancer-controller>"
+  fi
+}
 #[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 
 #=========================================================================
