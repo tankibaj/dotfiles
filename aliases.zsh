@@ -84,8 +84,26 @@ alias sshconfig="vim ~/.ssh/config"
 alias sshclr='ssh-keygen -R'
 alias ssh-host-ls="grep '^Host' $HOME/.ssh/config | sed 's/Host //' | sort -u"
 
-sshid() {
-  cat ~/.ssh/$1.pub | pbcopy && echo "$1 public was copied to clipboard"
+# Copy ssh public key
+copyid() {
+  local SSH_PATH=~/.ssh/
+  IFS=';' # https://en.wikipedia.org/wiki/Input_Field_Separators
+
+  read -ra KEYS <<< "$(find ${SSH_PATH} -type f -name "*.pub" | cut -f6 -d"/" | tr '\n' ';')"
+
+  local COUNT=1
+  for i in ${KEYS[@]}; do
+    read -ra ITEMS <<< "${i}"
+    echo "  ${COUNT}) ${ITEMS[0]}" >&2
+    ((COUNT=COUNT+1))
+  done
+
+  local SELECT=0
+  while [[ ${SELECT} -lt 1 || ${SELECT} -ge $COUNT ]]; do
+    read -p "Pick a SSH Key: " SELECT >&2
+  done
+
+  cat ${SSH_PATH}/${KEYS[(SELECT-1)]} | pbcopy && echo "${KEYS[(SELECT-1)]} has been copied to clipboard"
 }
 
 # List all keys in ~/.ssh directory
