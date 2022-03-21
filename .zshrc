@@ -4,6 +4,9 @@
 # Path to your dotfiles.
 export DOTFILES=$HOME/.dotfiles
 
+# Path to custom binary files
+export PATH=$PATH:$HOME/.dotfiles/bin
+
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
 
@@ -140,5 +143,8 @@ export LANG=en_US.UTF-8
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
+# Kubectl autocomplete
 [[ ! -f ~/.kubectlrc ]] || source ~/.kubectlrc
+
+# Helm autocomplete
 [[ ! -f ~/.helmrc ]] || source ~/.helmrc
