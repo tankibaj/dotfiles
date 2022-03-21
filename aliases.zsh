@@ -215,6 +215,9 @@ klogs() {
     echo "Example: klogs <kube-system> <aws-load-balancer-controller>"
   fi
 }
+alias pod-lens='kubectl pod-lens'
+alias node-shell='kubectl node-shell'
+alias open-svc='kubectl open-svc'
 #[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 
 #=========================================================================
