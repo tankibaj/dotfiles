@@ -134,9 +134,9 @@ whoisip() {
 
 listening() {
   if [ $# -eq 0 ]; then
-    sudo lsof -i -P | grep LISTEN
+    sudo lsof -nP -iTCP -sTCP:LISTEN
   elif [ $# -eq 1 ]; then
-    sudo lsof -i -P | grep LISTEN | grep -i --color=auto $1
+    sudo lsof -nP -iTCP -sTCP:LISTEN | grep -i --color=auto $1
   else
     echo "Usage: listening [port/appname]"
   fi
