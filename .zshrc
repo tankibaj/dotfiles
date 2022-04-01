@@ -90,6 +90,7 @@ plugins=(
     brew
     aws
     kubectl
+    kubectx
     helm
     laravel
     microk8s
