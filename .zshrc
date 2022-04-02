@@ -142,10 +142,27 @@ export LANG=en_US.UTF-8
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+[[ ! -f ${HOME}/.p10k.zsh ]] || source ${HOME}/.p10k.zsh
 
 # Kubectl autocomplete
-[[ ! -f ~/.kubectlrc ]] || source ~/.kubectlrc
+[[ ! -f ${HOME}/.kubectlrc ]] || source ${HOME}/.kubectlrc
 
 # Helm autocomplete
-[[ ! -f ~/.helmrc ]] || source ~/.helmrc
+[[ ! -f ${HOME}/.helmrc ]] || source ${HOME}/.helmrc
+
+# Python path
+[[ ! -d /opt/homebrew/opt/python@3.9 ]] || export PATH="/opt/homebrew/opt/python@3.9/bin:$PATH"
+
+# Krew path
+[[ ! -d ${HOME}/.krew ]] || export PATH="${PATH}:${HOME}/.krew/bin"
+
+# Zscaler CA
+[[ ! -f ${HOME}/zscaler-ca.pem ]] || export REQUESTS_CA_BUNDLE=${HOME}/zscaler-ca.pem
+
+# Kubectx autocomplete
+[[ ! -f ${HOME}/.kubectx ]] || source ${HOME}/.kubectx
+
+# Kubens autocomplete
+[[ ! -f ${HOME}/.kubens ]] || source ${HOME}/.kubens
+
+
