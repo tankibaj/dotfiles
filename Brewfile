@@ -35,6 +35,7 @@ brew "terraform"
 brew "kubectl"
 brew "kubectx"
 brew "helm"
+brew "krew"
 cask 'vnc-viewer'
 brew "watch"
 brew "stern"
