@@ -140,7 +140,7 @@ terraform.rc
 # Support for Project snippet scope
 !.vscode/*.code-snippets
 
-### Secret file s###
+### Secret file###
 *.secret
 *.secrets
 
@@ -149,3 +149,6 @@ terraform.rc
 
 ### Test directories ###
 **/.test/*
+
+### Ignore default YAML file for helm and secrects
+*.default.yaml
