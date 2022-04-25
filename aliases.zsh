@@ -168,6 +168,7 @@ alias commit-count='git rev-list --count'
 alias grm='rm -rf .git*'
 alias repo="gh repo"
 alias merge="git merge"
+alias squash-all = "!f(){ git reset $(git commit-tree HEAD^{tree} -m \"${1:-A new start}\");};f"
 
 gls() {
   if [[ $# -eq 1 ]]; then
