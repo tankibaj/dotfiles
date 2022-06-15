@@ -10,6 +10,9 @@ export PATH=$PATH:$HOME/.dotfiles/bin
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
 
+# homebrew bin path
+export HOMEBREW_BIN=/opt/homebrew/bin
+
 # Enable completions
 #autoload -Uz compinit && compinit
 
@@ -165,4 +168,9 @@ export LANG=en_US.UTF-8
 # Kubens autocomplete
 [[ ! -f ${HOME}/.kubens ]] || source ${HOME}/.kubens
 
+# stern autocomplete
+[[ ! -f ${HOMEBREW_BIN}/stern ]] || source <(stern --completion=zsh)
+
+# velero autocomplete
+[[ ! -f ${HOMEBREW_BIN}/velero ]] || source <(velero completion zsh)
 
