@@ -166,3 +166,26 @@ export LANG=en_US.UTF-8
 [[ ! -f ${HOME}/.kubens ]] || source ${HOME}/.kubens
 
 
+[[ ! -f ${HOME}/.helmrc ]] || source ${HOME}/.helmrc
+
+# Python path
+[[ ! -d /opt/homebrew/opt/python@3.9 ]] || export PATH="/opt/homebrew/opt/python@3.9/bin:$PATH"
+
+# Krew path
+[[ ! -d ${HOME}/.krew ]] || export PATH="${PATH}:${HOME}/.krew/bin"
+
+# Zscaler CA
+[[ ! -f ${HOME}/zscaler-ca.pem ]] || export REQUESTS_CA_BUNDLE=${HOME}/zscaler-ca.pem
+
+# Kubectx autocomplete
+[[ ! -f ${HOME}/.kubectx ]] || source ${HOME}/.kubectx
+
+# Kubens autocomplete
+[[ ! -f ${HOME}/.kubens ]] || source ${HOME}/.kubens
+
+# stern autocomplete
+[[ ! -f ${HOMEBREW_BIN}/stern ]] || source <(stern --completion=zsh)
+
+# velero autocomplete
+[[ ! -f ${HOMEBREW_BIN}/velero ]] || source <(velero completion zsh)
+
