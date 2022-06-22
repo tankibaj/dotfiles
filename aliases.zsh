@@ -218,6 +218,9 @@ klogs() {
 alias pod-lens='kubectl pod-lens'
 alias node-shell='kubectl node-shell'
 alias open-svc='kubectl open-svc'
+alias get-all="kubectl get all $@"
+alias watch-all="watch kubectl get all $@"
+alias watch-pv="watch kubectl get pv,pvc $@"
 #[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 
 #=========================================================================
