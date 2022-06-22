@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
 kube_list_pods() {
-  NS_ARG="--all-namespaces"
-  [[ -n "$1" ]] && NS_ARG="-n ${1}"
+#  NS_ARG="--all-namespaces"
+#  [[ -n "$1" ]] && NS_ARG="-n ${1}"
 
-  IFS=';' read -ra pods <<< "$(kubectl get pods $NS_ARG -o go-template='{{range .items}}{{.metadata.name}}:{{.metadata.namespace}}:{{.status.phase}}{{"\n"}}{{end}}' | sort -k 2 -k 1 -t: | tr '\n' ';')"
+  IFS=';' read -ra pods <<< "$(kubectl get pods -o go-template='{{range .items}}{{.metadata.name}}:{{.metadata.namespace}}:{{.status.phase}}{{"\n"}}{{end}}' | sort -k 2 -k 1 -t: | tr '\n' ';')"
   local count=1
   lines=$(for i in ${pods[@]}; do
     IFS=":" read -ra TOKS <<< "${i}"

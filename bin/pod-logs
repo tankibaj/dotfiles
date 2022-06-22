@@ -1,10 +1,18 @@
 #!/usr/bin/env bash
 
-kube_list_pods() {
-  NS_ARG="--all-namespaces"
-  [[ -n "$1" ]] && NS_ARG="-n ${1}"
+if getopts "n:" arg; then
+  NS_ARG=$OPTARG
+else
+  echo "Please specify namespace"
+  echo "Usage: pod-logs -n <namespace> -f"
+  exit 1;
+fi
 
-  IFS=';' read -ra pods <<< "$(kubectl get pods $NS_ARG -o go-template='{{range .items}}{{.metadata.name}}:{{.metadata.namespace}}:{{.status.phase}}{{"\n"}}{{end}}' | sort -k 2 -k 1 -t: | tr '\n' ';')"
+kube_list_pods() {
+#  NS_ARG="--all-namespaces"
+#  [[ -n "$1" ]] && NS_ARG="-n ${1}"
+
+  IFS=';' read -ra pods <<< "$(kubectl get pods -n $NS_ARG -o go-template='{{range .items}}{{.metadata.name}}:{{.metadata.namespace}}:{{.status.phase}}{{"\n"}}{{end}}' | sort -k 2 -k 1 -t: | tr '\n' ';')"
   local count=1
   lines=$(for i in ${pods[@]}; do
     IFS=":" read -ra TOKS <<< "${i}"
@@ -44,10 +52,10 @@ function kube_list_pod_containers() {
 SELECT=$(kube_list_pods)
 IFS=":" read -ra POD <<< "${SELECT}"
 
-if [[ "${POD[2]}" != "Running" ]]; then
-  echo "ERROR: Pod ${POD[0]} is not running" >&2
-  exit 1
-fi
+#if [[ "${POD[2]}" != "Running" ]]; then
+#  echo "ERROR: Pod ${POD[0]} is not running" >&2
+#  exit 1
+#fi
 
 
 if [[ $(kubectl get pod ${POD[0]} -n ${POD[1]} -o go-template='{{range .spec.containers}}{{.name}}{{"\n"}}{{end}}' | wc -l) -ge 2 ]]; then
