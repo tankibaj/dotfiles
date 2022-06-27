@@ -219,7 +219,7 @@ alias pod-lens='kubectl pod-lens'
 alias node-shell='kubectl node-shell'
 alias open-svc='kubectl open-svc'
 alias get-all="kubectl get all,cm,secret,ing,pvc $@"
-alias watch-all="kubectl get all,cm,secret,ing,pvc $@"
+alias watch-all="watch kubectl get all,cm,secret,ing,pvc $@"
 alias watch-pv="watch kubectl get pv,pvc $@"
 #[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 
