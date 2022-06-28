@@ -152,3 +152,7 @@ terraform.rc
 
 ### Ignore default YAML file for helm and secrects
 *.default.yaml
+
+### Ignore snippet directories
+**/.snippet/*
+**/.snippets/*
