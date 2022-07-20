@@ -221,7 +221,7 @@ alias open-svc='kubectl open-svc'
 alias watch-all="watch kubectl get all,cm,secret,ing,pvc $@"
 alias watch-pv="watch kubectl get pv,pvc $@"
 alias get-all="kubectl get all,cm,secret,ing,pvc $@"
-alias get-event="kubectl get events --sort-by='.metadata.managedFields[0].time"
+alias get-event="kubectl get events --sort-by='.metadata.managedFields[0].time'"
 #[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 
 #=========================================================================
