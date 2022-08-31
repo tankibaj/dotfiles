@@ -218,10 +218,17 @@ klogs() {
 alias pod-lens='kubectl pod-lens'
 alias node-shell='kubectl node-shell'
 alias open-svc='kubectl open-svc'
-alias watch-all="watch kubectl get all,cm,secret,ing,pvc $@"
+alias watch-all="watch kubectl get all,ing,pvc $@"
 alias watch-pv="watch kubectl get pv,pvc $@"
-alias get-all="kubectl get all,cm,secret,ing,pvc $@"
+alias get-all="kubectl get all,pvc,ing,secret,cm $@"
 alias get-event="kubectl get events --sort-by='.metadata.managedFields[0].time'"
+alias get-pod="kubectl get pod $@"
+alias get-pv="kubectl get pv $@"
+alias get-pvc="kubectl get pvc $@"
+alias get-ingress="kubectl get ing $@"
+alias get-secret="kubectl get secret $@"
+alias get-configmap="kubectl get cm $@"
+
 #[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 
 #=========================================================================

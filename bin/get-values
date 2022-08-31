@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+
+repo_version_list() {
+  IFS=';' # https://en.wikipedia.org/wiki/Input_Field_Separators
+
+  read -ra PROFILES <<< "$(helm search repo grafana/promtail --versions | tr '\n' ';')"
+
+  local COUNT=1
+  for i in ${PROFILES[@]}; do
+    read -ra ITEMS <<< "${i}"
+    echo "  ${COUNT}) ${ITEMS[0]}" >&2
+    ((COUNT=COUNT+1))
+  done
+
+  local SELECT=0
+  while [[ ${SELECT} -lt 1 || ${SELECT} -ge $COUNT ]]; do
+    read -p "Pick a chart version: " SELECT >&2
+  done
+
+  echo "${PROFILES[(SELECT-1)]}"
+}
+
+repo_version_list
+
+#helm show values grafana/promtail --version 6.2.2 > default-values.yaml
