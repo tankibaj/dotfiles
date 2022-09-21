@@ -78,31 +78,8 @@ pathls() {
 #[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 
 #=========================================================================
-#      ---------------| SSH |---------------
+#      ---------------| rsync |---------------
 #=========================================================================
-alias sshconfig="vim ~/.ssh/config"
-alias sshclr='ssh-keygen -R'
-alias ssh-host-ls="grep '^Host' $HOME/.ssh/config | sed 's/Host //' | sort -u"
-
-# List all keys in ~/.ssh directory
-ssh-id-ls() {
-  for file in ~/.ssh/*.pub; do
-    printf "%s %s\n" "$(ssh-keygen -lf "$file" | awk '{$1=""}1')" "$file"
-  done | column -t | grep --color=auto "$line" || echo "$line"
-}
-
-# List added keys
-ssh-add-ls() {
-  while read -r line; do
-    for file in ~/.ssh/*.pub; do
-      printf "%s %s\n" "$(ssh-keygen -lf "$file" | awk '{$1=""}1')" "$file"
-    done | column -t | grep --color=auto "$line" || echo "$line"
-  done < <(ssh-add -l | awk '{print $2}')
-}
-
-# Add all private keys in ~/.ssh directory
-alias ssh-add-all='grep -slR "PRIVATE" ~/.ssh/ | xargs ssh-add --apple-use-keychain'
-
 rcp() {
   if [[ $# -eq 2 ]]; then
     rsync -avzh --stats --progress $1 $2

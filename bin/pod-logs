@@ -1,11 +1,9 @@
 #!/usr/bin/env bash
 
-if getopts "n:" arg; then
+if getopts ":n:f:" arg; then
   NS_ARG=$OPTARG
 else
-  echo "Please specify namespace"
-  echo "Usage: pod-logs -n <namespace> -f"
-  exit 1;
+  NS_ARG=$(kubectl config view --minify -o jsonpath='{..namespace}')
 fi
 
 kube_list_pods() {
@@ -52,16 +50,11 @@ function kube_list_pod_containers() {
 SELECT=$(kube_list_pods)
 IFS=":" read -ra POD <<< "${SELECT}"
 
-#if [[ "${POD[2]}" != "Running" ]]; then
-#  echo "ERROR: Pod ${POD[0]} is not running" >&2
-#  exit 1
-#fi
-
 
 if [[ $(kubectl get pod ${POD[0]} -n ${POD[1]} -o go-template='{{range .spec.containers}}{{.name}}{{"\n"}}{{end}}' | wc -l) -ge 2 ]]; then
   SELECT=$(kube_list_pod_containers ${POD[0]} ${POD[1]})
-  kubectl -n ${POD[1]} logs "${POD[0]}" -c ${SELECT} $@
+  kubectl -n ${POD[1]} logs --follow "${POD[0]}" -c ${SELECT} -f
 else
-  kubectl -n ${POD[1]} logs "${POD[0]}" $@
+  kubectl -n ${POD[1]} logs --follow "${POD[0]}"
 fi
 

@@ -1,0 +1,84 @@
+#!/usr/bin/env bash
+
+NAMESPACE=$(kubectl config view --minify -o jsonpath='{..namespace}')
+
+kube_list_pods() {
+  IFS=';' read -ra pods <<< "$(kubectl get pods -n $NAMESPACE -o go-template='{{range .items}}{{.metadata.name}}:{{.metadata.namespace}}:{{.status.phase}}{{"\n"}}{{end}}' | sort -k 2 -k 1 -t: | tr '\n' ';')"
+  local count=1
+  lines=$(for i in ${pods[@]}; do
+    IFS=":" read -ra TOKS <<< "${i}"
+    printf "  $count) ${TOKS[0]}\t${TOKS[1]}\t${TOKS[2]}\n"
+    ((count=count+1))
+  done | column -t)
+  count=$(echo "$lines" | wc -l)
+  echo "$lines" >&2
+  local sel=0
+  while [[ $sel -lt 1 || $sel -gt $count ]]; do
+    read -p "Pick a Pod: " sel >&2
+  done
+  echo "${pods[(sel-1)]}"
+}
+
+function kube_list_pod_containers() {
+  POD=$1
+  NAMESPACE=$2
+  IFS=';' read -ra items <<< "$(kubectl get pod ${POD} -n ${NAMESPACE} -o go-template='{{range .spec.containers}}{{.name}}{{"\n"}}{{end}}' | tr '\n' ';')"
+  local count=1
+  lines=$(for i in ${items[@]}; do
+    printf "  $count) ${i}\n"
+    ((count=count+1))
+  done | column -t)
+  count=$(echo "$lines" | wc -l)
+  if [[ $count -gt 1 ]]; then
+    printf "\nPod has multiple containers:\n" >&2
+    echo "$lines" >&2
+    local sel=0
+    while [[ $sel -lt 1 || $sel -gt $count ]]; do
+      read -p "Pick a Container: " sel >&2
+    done
+  fi
+  echo "${items[(sel-1)]}"
+}
+
+help() {
+    local -r flagsTable=$(
+        printf "%s\n" \
+            "-h, --help, help               Display help list" \
+            "-l, --log, log                 View the logs for a container of a pod" \
+            "-s, --shell, shell             Shell in a container of a pod"
+    )
+    echo -e "$flagsTable"
+}
+
+OPTION=$1
+case "$OPTION" in
+-h | --help | help)
+    help
+    ;;
+-l | --log | log)
+    SELECT=$(kube_list_pods)
+    IFS=":" read -ra POD <<< "${SELECT}"
+
+    if [[ $(kubectl get pod ${POD[0]} -n ${POD[1]} -o go-template='{{range .spec.containers}}{{.name}}{{"\n"}}{{end}}' | wc -l) -ge 2 ]]; then
+      SELECT=$(kube_list_pod_containers ${POD[0]} ${POD[1]})
+      kubectl -n ${POD[1]} logs --follow "${POD[0]}" -c ${SELECT} -f
+    else
+      kubectl -n ${POD[1]} logs --follow "${POD[0]}"
+    fi
+    ;;
+-s | --shell | shell)
+    SELECT=$(kube_list_pods)
+    IFS=":" read -ra POD <<< "${SELECT}"
+
+    if [[ $(kubectl get pod ${POD[0]} -n ${POD[1]} -o go-template='{{range .spec.containers}}{{.name}}{{"\n"}}{{end}}' | wc -l) -ge 2 ]]; then
+      SELECT=$(kube_list_pod_containers ${POD[0]} ${POD[1]})
+      kubectl -n ${POD[1]} exec -it "${POD[0]}" -c ${SELECT} -- ${2:-bash}
+    else
+      kubectl -n ${POD[1]} exec -it "${POD[0]}" -- ${2:-bash}
+    fi
+    ;;
+*)
+    help
+    exit
+    ;;
+esac
