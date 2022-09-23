@@ -175,7 +175,7 @@ export LANG=en_US.UTF-8
 [[ ! -d ${HOME}/.krew ]] || export PATH="${PATH}:${HOME}/.krew/bin"
 
 # Zscaler CA
-[[ ! -f ${HOME}/zscaler-ca.pem ]] || export REQUESTS_CA_BUNDLE=${HOME}/zscaler-ca.pem
+[[ ! -f ${HOME}/ZscalerRootCertificate.crt ]] || export REQUESTS_CA_BUNDLE=${HOME}/ZscalerRootCertificate.crt
 
 # Kubectx autocomplete
 [[ ! -f ${HOME}/.kubectx ]] || source ${HOME}/.kubectx
