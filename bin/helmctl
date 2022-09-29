@@ -1,0 +1,94 @@
+#!/usr/bin/env bash
+
+set -eo pipefail
+
+help() {
+    local -r flagsTable=$(
+        printf "%s\n" \
+            "-h, --help, help               Display help list" \
+            "-l, --list, list               List chart version" \
+            "-v, --values, values           Download chart values"
+    )
+    echo -e "$flagsTable"
+}
+
+repo() {
+  IFS=';' # https://en.wikipedia.org/wiki/Input_Field_Separators
+
+  read -ra REPO <<< "$(helm repo list --output json | jq -r '.[].name' | tr '\n' ';')"
+
+  local COUNT=1
+  for i in ${REPO[@]}; do
+    read -ra ITEMS <<< "${i}"
+    echo "  ${COUNT}) ${ITEMS[0]}" >&2
+    ((COUNT=COUNT+1))
+  done
+
+  local SELECT=0
+  while [[ ${SELECT} -lt 1 || ${SELECT} -ge $COUNT ]]; do
+    read -p "Pick a repo: " SELECT >&2
+  done
+
+  echo "${REPO[(SELECT-1)]}"
+}
+
+chart() {
+  IFS=';' # https://en.wikipedia.org/wiki/Input_Field_Separators
+
+  local REPO=$(repo)
+  read -ra CHART <<< "$(helm search repo ${REPO} --output json | jq -r '.[].name' | tr '\n' ';')"
+
+  local COUNT=1
+  for i in ${CHART[@]}; do
+    read -ra ITEMS <<< "${i}"
+    echo "  ${COUNT}) ${ITEMS[0]}" >&2
+    ((COUNT=COUNT+1))
+  done
+
+  local SELECT=0
+  while [[ ${SELECT} -lt 1 || ${SELECT} -ge $COUNT ]]; do
+    read -p "Pick a chart: " SELECT >&2
+  done
+
+  echo "${CHART[(SELECT-1)]}"
+}
+
+version() {
+  IFS=';' # https://en.wikipedia.org/wiki/Input_Field_Separators
+
+  CHART=$(chart)
+  read -ra VERSION <<< "$(helm search repo ${CHART} --versions --output json | jq -r '.[].version' | tr '\n' ';')"
+
+  local COUNT=1
+  for i in ${VERSION[@]}; do
+    read -ra ITEMS <<< "${i}"
+    echo "  ${COUNT}) ${ITEMS[0]}" >&2
+    ((COUNT=COUNT+1))
+  done
+
+  local SELECT=0
+  while [[ ${SELECT} -lt 1 || ${SELECT} -ge $COUNT ]]; do
+    read -p "Pick a chart version: " SELECT >&2
+  done
+
+  echo "${CHART} --version ${VERSION[(SELECT-1)]}"
+}
+
+OPTION=$1
+case "$OPTION" in
+-h | --help | help)
+    help
+    ;;
+-l | --list | list)
+    CHART=$(chart)
+    helm search repo ${CHART} --versions
+    ;;
+-v | --values | values)
+    CHART_VERSION=$(version)
+    helm show values ${CHART_VERSION} > values.default.yaml
+    ;;
+*)
+    help
+    exit 1
+    ;;
+esac
