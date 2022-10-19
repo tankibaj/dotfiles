@@ -43,15 +43,20 @@ function kube_list_pod_containers() {
 help() {
     local -r flagsTable=$(
         printf "%s\n" \
+            "-b, --busybox, busybox         Run busybox pod" \
             "-h, --help, help               Display help list" \
             "-l, --log, log                 View the logs for a container of a pod" \
-            "-s, --shell, shell             Shell in a container of a pod"
+            "-s, --shell, shell             Shell in a container of a pod" \
+            "-w, --whoami, whoami           Run whoami pod"
     )
     echo -e "$flagsTable"
 }
 
 OPTION=$1
 case "$OPTION" in
+-b | --busybox | busybox)
+    kubectl run busybox --rm --image=radial/busyboxplus:curl -i --tty
+    ;;
 -h | --help | help)
     help
     ;;
@@ -76,6 +81,9 @@ case "$OPTION" in
     else
       kubectl -n ${POD[1]} exec -it "${POD[0]}" -- ${2:-bash}
     fi
+    ;;
+-w | --whoami | whoami)
+    kubectl run whoami --rm --image=traefik/whoami -i --tty
     ;;
 *)
     help

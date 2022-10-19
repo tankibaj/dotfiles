@@ -204,7 +204,7 @@ alias get-pv="kubectl get pv $@"
 alias get-pvc="kubectl get pvc $@"
 alias get-ingress="kubectl get ing $@"
 alias get-secret="kubectl get secret $@"
-alias get-configmap="kubectl get cm $@"
+alias get-cmap="kubectl get cm $@"
 
 #[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 
