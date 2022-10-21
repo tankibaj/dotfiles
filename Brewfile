@@ -20,7 +20,7 @@ brew "iperf3"
 brew "nmap"
 cask "pdf-squeezer"
 cask "appcleaner"
-brew "monitorcontrol"
+cask "monitorcontrol"
 cask "clipy"
 brew "git-filter-repo"
 #=========================================================================
