@@ -1,0 +1,77 @@
+#!/usr/bin/env bash
+
+list_profile() {
+  IFS=';' # https://en.wikipedia.org/wiki/Input_Field_Separators
+
+  read -ra PROFILES <<<"$(aws configure list-profiles | tr '\n' ';')"
+
+  local COUNT=1
+  for i in ${PROFILES[@]}; do
+    read -ra ITEMS <<<"${i}"
+    echo "  ${COUNT}) ${ITEMS[0]}" >&2
+    ((COUNT = COUNT + 1))
+  done
+
+  local SELECT=0
+  while [[ ${SELECT} -lt 1 || ${SELECT} -ge $COUNT ]]; do
+    read -p "Pick an AWS profile: " SELECT >&2
+  done
+
+  echo "${PROFILES[(SELECT - 1)]}"
+}
+
+get_kubeconfig() {
+  IFS=';' # https://en.wikipedia.org/wiki/Input_Field_Separators
+
+  local PROFILE=$(list_profile)
+  read -ra CLUSTERS <<<"$(aws eks list-clusters --profile ${PROFILE} --output json | jq '.clusters[]' | tr -d '"' | tr '\n' ';')"
+
+  local COUNT=1
+  for i in ${CLUSTERS[@]}; do
+    read -ra ITEMS <<<"${i}"
+    echo "  ${COUNT}) ${ITEMS[0]}" >&2
+    ((COUNT = COUNT + 1))
+  done
+
+  local SELECT=0
+  while [[ ${SELECT} -lt 1 || ${SELECT} -ge $COUNT ]]; do
+    read -p "Pick an EKS cluster: " SELECT >&2
+  done
+
+  aws eks update-kubeconfig --name ${CLUSTERS[(SELECT - 1)]} --profile ${PROFILE}
+}
+
+help() {
+  local -r flagsTable=$(
+    printf "%s\n" \
+      "-c, --config, config           Download kubeconfig of eks cluster" \
+      "-e, --edit, edit               Open ~/.aws/config file in vim editor" \
+      "-h, --help, help               Display help list" \
+      "-l, --list, list               List aws profiles" \
+      "-p, --profile, profile         Change aws profile"
+  )
+  echo -e "$flagsTable"
+}
+
+OPTION=$1
+case "$OPTION" in
+-c | --config | config)
+  get_kubeconfig
+  ;;
+-e | --edit | edit)
+  vim ~/.aws/config
+  ;;
+-h | --help | help)
+  help
+  ;;
+-l | --list | list)
+  aws configure list-profiles
+  ;;
+-p | --profile | profile)
+  AWS_PROFILE=$(list_profile) zsh
+  ;;
+*)
+  help
+  exit
+  ;;
+esac
