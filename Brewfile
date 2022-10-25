@@ -23,7 +23,7 @@ cask "appcleaner"
 cask "monitorcontrol"
 cask "clipy"
 brew "git-filter-repo"
-brew "rectangle"
+cask "rectangle"
 #=========================================================================
 #      ---------------| DevOps Tools |---------------
 #=========================================================================
