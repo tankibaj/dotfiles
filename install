@@ -6,101 +6,19 @@ DOTFILES=$HOME/.dotfiles
 ZSH=$HOME/.oh-my-zsh
 
 #=========================================================================
-#      ---------------| Common |---------------
-#=========================================================================
-backup() {
-  if [[ -e $HOME/.zshrc ]]; then
-    cp $HOME/.zshrc $HOME/.zshrc.original
-  fi
-
-  if [[ -e $HOME/.bashrc ]]; then
-    cp $HOME/.bashrc $HOME/.bashrc.original
-  fi
-}
-
-cleaUp() {
-  if [[ -d $DOTFILES ]]; then
-    sudo rm -rf $DOTFILES
-  fi
-
-  if [[ -d $ZSH ]]; then
-    sudo rm -rf $ZSH
-  fi
-
-  if [[ -e $HOME/.p10k.zsh ]]; then
-    sudo rm -f $HOME/.p10k.zsh
-  fi
-
-  if [[ -L $HOME/.zshrc ]]; then
-    sudo rm -f $HOME/.zshrc
-  fi
-}
-
-installation() {
-  echo
-  echo
-  echo "Setting up dotfiles....."
-  echo
-  echo
-
-  cleaUp                                                                           # -- Remove old files and directories if exist
-  backup                                                                           # -- Backup existing .zshrc or .bashrc before install Oh My Zsh
-  git clone https://github.com/tankibaj/dotfiles.git $DOTFILES                     # -- Clone Dotfiles
-  git clone https://github.com/ohmyzsh/ohmyzsh.git $ZSH                            # -- Clone Oh My Zsh
-  git clone https://github.com/romkatv/powerlevel10k.git $ZSH/themes/powerlevel10k # -- Clone PowerLeve10K theme
-
-  # -- Clone PowerLeve10K plugins for autosuggestion and syntax highlighting:
-  git clone https://github.com/zsh-users/zsh-autosuggestions.git $ZSH/plugins/zsh-autosuggestions
-  git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $ZSH/plugins/zsh-syntax-highlighting
-
-  ln -s $DOTFILES/.zshrc $HOME/.zshrc       # -- Symlinks the .zshrc file from the .dotfiles/.zshrc
-  ln -s $DOTFILES/.p10k.zsh $HOME/.p10k.zsh # -- Symlinks the .p10k.zsh file from .dotfiles/.p10k.zsh
-
-  # -- Global gitignore
-  ln -s $DOTFILES/.gitignore $HOME/.gitignore
-  git config --global core.excludesfile $HOME/.dotfiles/.gitignore
-
-  echo
-  echo
-  echo "[INFO] Setup has been completed!!! Please restart your terminal"
-  echo
-}
-
-#=========================================================================
 #      ---------------| MacOS |---------------
 #=========================================================================
-brewBundle() {
-  # Check for Homebrew and install if don't have it
-  if test ! $(which brew); then
+macOS() {
+  if test ! $(which brew); then # -- Check for Homebrew and install if don't have it
     /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
     echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >>$HOME/.zprofile
     eval "$(/opt/homebrew/bin/brew shellenv)"
   fi
+
+  setupRepo
   brew update                                   # Update Homebrew recipes
   brew bundle install --file=$DOTFILES/Brewfile # Install all contents from Brewfile
 }
-
-macOS() {
-  installation
-#  brewBundle # -- Install all contents from Brewfile
-}
-
-if [[ "$(uname -s)" == "Darwin" ]]; then
-  if [[ ! -d $DOTFILES ]]; then
-    macOS
-  fi
-#  if [[ -d $DOTFILES ]]; then
-#    read -p "[INFO] Dotfiles already installed. Do you want to reinstall? [y/N]: " confirmation
-#    case $(echo $confirmation | tr '[A-Z]' '[a-z]') in
-#    y | yes)
-#      macOS
-#      ;;
-#    *)
-#      exit 1
-#      ;;
-#    esac
-#  fi
-fi
 
 #=========================================================================
 #      ---------------| Ubuntu |---------------
@@ -125,33 +43,98 @@ setupLocale() {
   sudo timedatectl set-timezone Europe/Berlin
 }
 
-installPackage() {
-  sudo apt update
-  sudo apt install -qq -y zsh curl git jq zip ntp net-tools speedtest
-}
-
 ubuntu() {
   curl -s https://packagecloud.io/install/repositories/ookla/speedtest-cli/script.deb.sh | sudo bash
-  installPackage
+  sudo apt update
+  sudo apt install -qq -y zsh curl git jq zip ntp net-tools speedtest
   installEXA
   setupLocale
   sudo usermod -s /usr/bin/zsh $(whoami) # -- Set ZSH default shell for user
-  installation
+  setupRepo
 }
 
-if [[ "$(cat /etc/issue | grep Ubuntu | awk '{ print $1}')" = "Ubuntu" ]] || [[ "$(cat /etc/issue | grep Debian | awk '{ print $1}')" = "Debian" ]]; then
-  if [[ ! -d $DOTFILES ]]; then
+#=========================================================================
+#      ---------------| Common |---------------
+#=========================================================================
+backup() {
+  if [[ -e $HOME/.zshrc ]]; then
+    cp $HOME/.zshrc $HOME/.zshrc.original
+  fi
+
+  if [[ -e $HOME/.bashrc ]]; then
+    cp $HOME/.bashrc $HOME/.bashrc.original
+  fi
+}
+
+cleanUp() {
+  if [[ -d $DOTFILES ]]; then
+    sudo rm -rf $DOTFILES
+  fi
+
+  if [[ -d $ZSH ]]; then
+    sudo rm -rf $ZSH
+  fi
+
+  if [[ -e $HOME/.p10k.zsh ]]; then
+    sudo rm -f $HOME/.p10k.zsh
+  fi
+
+  if [[ -L $HOME/.zshrc ]]; then
+    sudo rm -f $HOME/.zshrc
+  fi
+}
+
+setupRepo() {
+  git clone https://github.com/tankibaj/dotfiles.git $DOTFILES                     # -- Clone Dotfiles
+  git clone https://github.com/ohmyzsh/ohmyzsh.git $ZSH                            # -- Clone Oh My Zsh
+  git clone https://github.com/romkatv/powerlevel10k.git $ZSH/themes/powerlevel10k # -- Clone PowerLeve10K theme
+
+  # -- Clone PowerLeve10K plugins for autosuggestion and syntax highlighting:
+  git clone https://github.com/zsh-users/zsh-autosuggestions.git $ZSH/plugins/zsh-autosuggestions
+  git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $ZSH/plugins/zsh-syntax-highlighting
+
+  ln -s $DOTFILES/.zshrc $HOME/.zshrc       # -- Symlinks the .zshrc file from the .dotfiles/.zshrc
+  ln -s $DOTFILES/.p10k.zsh $HOME/.p10k.zsh # -- Symlinks the .p10k.zsh file from .dotfiles/.p10k.zsh
+
+  # -- Global gitignore
+  ln -s $DOTFILES/.gitignore $HOME/.gitignore
+  git config --global core.excludesfile $HOME/.dotfiles/.gitignore
+}
+
+install() {
+  echo
+  echo
+  echo "Setting up dotfiles....."
+  echo
+  echo
+
+  cleanUp # -- Remove old files and directories if exist
+  backup  # -- Backup existing .zshrc or .bashrc before install Oh My Zsh
+
+  if [[ "$(uname -s)" == "Darwin" ]]; then
+    macOS
+  fi
+
+  if [[ "$(cat /etc/issue | grep Ubuntu | awk '{ print $1}')" = "Ubuntu" ]] || [[ "$(cat /etc/issue | grep Debian | awk '{ print $1}')" = "Debian" ]]; then
     ubuntu
   fi
-#  if [[ -d $DOTFILES ]]; then
-#    read -p "[INFO] Dotfiles already installed. Do you want to reinstall? [y/N]: " confirmation
-#    case $(echo $confirmation | tr '[A-Z]' '[a-z]') in
-#    y | yes)
-#      ubuntu
-#      ;;
-#    *)
-#      exit 1
-#      ;;
-#    esac
-#  fi
+
+  echo
+  echo
+  echo "[INFO] Setup has been completed!!! Please restart your terminal"
+  echo
+}
+
+if [[ ! -d $DOTFILES ]]; then
+  install
+else
+  read -p "[INFO] Dotfiles already installed. Do you want to reinstall? [y/N]: " confirmation
+  case $(echo $confirmation | tr '[A-Z]' '[a-z]') in
+  y | yes)
+    install
+    ;;
+  *)
+    exit 1
+    ;;
+  esac
 fi
