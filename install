@@ -89,17 +89,17 @@ if [[ "$(uname -s)" == "Darwin" ]]; then
   if [[ ! -d $DOTFILES ]]; then
     macOS
   fi
-  if [[ -d $DOTFILES ]]; then
-    read -p "[INFO] Dotfiles already installed. Do you want to reinstall? [y/N]: " confirmation
-    case $(echo $confirmation | tr '[A-Z]' '[a-z]') in
-    y | yes)
-      macOS
-      ;;
-    *)
-      exit 1
-      ;;
-    esac
-  fi
+#  if [[ -d $DOTFILES ]]; then
+#    read -p "[INFO] Dotfiles already installed. Do you want to reinstall? [y/N]: " confirmation
+#    case $(echo $confirmation | tr '[A-Z]' '[a-z]') in
+#    y | yes)
+#      macOS
+#      ;;
+#    *)
+#      exit 1
+#      ;;
+#    esac
+#  fi
 fi
 
 #=========================================================================
@@ -143,15 +143,15 @@ if [[ "$(cat /etc/issue | grep Ubuntu | awk '{ print $1}')" = "Ubuntu" ]] || [[ 
   if [[ ! -d $DOTFILES ]]; then
     ubuntu
   fi
-  if [[ -d $DOTFILES ]]; then
-    read -p "[INFO] Dotfiles already installed. Do you want to reinstall? [y/N]: " confirmation
-    case $(echo $confirmation | tr '[A-Z]' '[a-z]') in
-    y | yes)
-      ubuntu
-      ;;
-    *)
-      exit 1
-      ;;
-    esac
-  fi
+#  if [[ -d $DOTFILES ]]; then
+#    read -p "[INFO] Dotfiles already installed. Do you want to reinstall? [y/N]: " confirmation
+#    case $(echo $confirmation | tr '[A-Z]' '[a-z]') in
+#    y | yes)
+#      ubuntu
+#      ;;
+#    *)
+#      exit 1
+#      ;;
+#    esac
+#  fi
 fi
