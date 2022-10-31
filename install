@@ -82,7 +82,7 @@ brewBundle() {
 
 macOS() {
   installation
-  brewBundle # -- Install all contents from Brewfile
+#  brewBundle # -- Install all contents from Brewfile
 }
 
 if [[ "$(uname -s)" == "Darwin" ]]; then
@@ -135,8 +135,8 @@ ubuntu() {
   installPackage
   installEXA
   setupLocale
-  installation
   sudo usermod -s /usr/bin/zsh $(whoami) # -- Set ZSH default shell for user
+  installation
 }
 
 if [[ "$(cat /etc/issue | grep Ubuntu | awk '{ print $1}')" = "Ubuntu" ]] || [[ "$(cat /etc/issue | grep Debian | awk '{ print $1}')" = "Debian" ]]; then
