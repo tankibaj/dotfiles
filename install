@@ -1,33 +1,14 @@
 #!/usr/bin/env bash
 
+set -eo pipefail
+
 DOTFILES=$HOME/.dotfiles
 ZSH=$HOME/.oh-my-zsh
 
-installDotfiles() {
-  echo
-  echo
-  echo "Setting up dotfiles....."
-  echo
-  echo
-
-  cleaUp                                                                           # Remove old files and directories if exist
-  git clone https://github.com/tankibaj/dotfiles.git $DOTFILES                     # Clone Dotfiles
-  brewBundle                                                                       # Install all contents from Brewfile
-  backupSHRC                                                                       # Backup existing .zshrc or .bashrc before install Oh My Zsh
-  git clone https://github.com/ohmyzsh/ohmyzsh.git $ZSH                            # Clone Oh My Zsh
-  git clone https://github.com/romkatv/powerlevel10k.git $ZSH/themes/powerlevel10k # Clone PowerLeve10K theme
-
-  # Clone PowerLeve10K plugins for autosuggestion and syntax highlighting:
-  git clone https://github.com/zsh-users/zsh-autosuggestions.git $ZSH/plugins/zsh-autosuggestions
-  git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $ZSH/plugins/zsh-syntax-highlighting
-  ln -s $DOTFILES/.zshrc $HOME/.zshrc # Symlinks the .zshrc file from the .dotfiles
-
-  # Global gitignore
-  ln -s $DOTFILES/.gitignore $HOME/.gitignore
-  git config --global core.excludesfile $HOME/.dotfiles/.gitignore
-}
-
-backupSHRC() {
+#=========================================================================
+#      ---------------| Common |---------------
+#=========================================================================
+backup() {
   if [[ -e $HOME/.zshrc ]]; then
     cp $HOME/.zshrc $HOME/.zshrc.original
   fi
@@ -35,17 +16,6 @@ backupSHRC() {
   if [[ -e $HOME/.bashrc ]]; then
     cp $HOME/.bashrc $HOME/.bashrc.original
   fi
-}
-
-brewBundle() {
-  # Check for Homebrew and install if don't have it
-  if test ! $(which brew); then
-    /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-    echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >>$HOME/.zprofile
-    eval "$(/opt/homebrew/bin/brew shellenv)"
-  fi
-  brew update                                   # Update Homebrew recipes
-  brew bundle install --file=$DOTFILES/Brewfile # Install all contents from Brewfile
 }
 
 cleaUp() {
@@ -66,27 +36,126 @@ cleaUp() {
   fi
 }
 
+installation() {
+  echo
+  echo
+  echo "Setting up dotfiles....."
+  echo
+  echo
+
+  cleaUp                                                                           # -- Remove old files and directories if exist
+  backup                                                                           # -- Backup existing .zshrc or .bashrc before install Oh My Zsh
+  git clone https://github.com/tankibaj/dotfiles.git $DOTFILES                     # -- Clone Dotfiles
+  git clone https://github.com/ohmyzsh/ohmyzsh.git $ZSH                            # -- Clone Oh My Zsh
+  git clone https://github.com/romkatv/powerlevel10k.git $ZSH/themes/powerlevel10k # -- Clone PowerLeve10K theme
+
+  # -- Clone PowerLeve10K plugins for autosuggestion and syntax highlighting:
+  git clone https://github.com/zsh-users/zsh-autosuggestions.git $ZSH/plugins/zsh-autosuggestions
+  git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $ZSH/plugins/zsh-syntax-highlighting
+
+  ln -s $DOTFILES/.zshrc $HOME/.zshrc       # -- Symlinks the .zshrc file from the .dotfiles/.zshrc
+  ln -s $DOTFILES/.p10k.zsh $HOME/.p10k.zsh # -- Symlinks the .p10k.zsh file from .dotfiles/.p10k.zsh
+
+  # -- Global gitignore
+  ln -s $DOTFILES/.gitignore $HOME/.gitignore
+  git config --global core.excludesfile $HOME/.dotfiles/.gitignore
+
+  echo
+  echo
+  echo "[INFO] Setup has been completed!!! Please restart your terminal"
+  echo
+}
+
+#=========================================================================
+#      ---------------| MacOS |---------------
+#=========================================================================
+brewBundle() {
+  # Check for Homebrew and install if don't have it
+  if test ! $(which brew); then
+    /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+    echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >>$HOME/.zprofile
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+  fi
+  brew update                                   # Update Homebrew recipes
+  brew bundle install --file=$DOTFILES/Brewfile # Install all contents from Brewfile
+}
+
+macOS() {
+  installation
+  brewBundle # -- Install all contents from Brewfile
+}
+
 if [[ "$(uname -s)" == "Darwin" ]]; then
   if [[ ! -d $DOTFILES ]]; then
-    installDotfiles
-  else
-    echo
-    read -p "[INFO] Dotfiles already installed. Do you want to reinstall? [y/N]: " confirmation
-    echo
-    until [[ "$confirmation" =~ ^[yYnN]*$ ]]; do
-      echo
-      echo "[ERROR] invalid selection."
-      echo
-      read -p "[INFO] Dotfiles already installed. Do you want to reinstall? [y/N]: " confirmation
-      echo
-    done
-    if [[ "$confirmation" =~ ^[yY]$ ]]; then
-      installDotfiles
-    fi
+    macOS
   fi
-else
-  echo
-  echo "[ERROR] This script can be run only on macOS"
-  echo
-  exit 1
+  if [[ -d $DOTFILES ]]; then
+    read -p "[INFO] Dotfiles already installed. Do you want to reinstall? [y/N]: " confirmation
+    case $(echo $confirmation | tr '[A-Z]' '[a-z]') in
+    y | yes)
+      macOS
+      ;;
+    *)
+      exit 1
+      ;;
+    esac
+  fi
+fi
+
+#=========================================================================
+#      ---------------| Ubuntu |---------------
+#=========================================================================
+installEXA() {
+  curl -s https://api.github.com/repos/ogham/exa/releases/latest |
+    grep browser_download_url |
+    grep exa-linux-x86_64-v |
+    cut -d '"' -f 4 |
+    wget -i -
+  unzip exa-linux-x86_64-v*.zip
+  sudo mv bin/exa /usr/local/bin/exa
+  sudo mv completions/exa.zsh /usr/local/share/zsh/site-functions/exa.zsh
+  rm -rf bin
+  rm -rf completions
+  rm -rf man
+  rm -f exa-linux-x86_64-$EXA_LATEST_RELEASE.zip
+  cd -
+}
+
+setupLocale() {
+  sudo rm -f /etc/default/locale
+  sudo locale-gen "en_US.UTF-8"
+  sudo update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
+  source /etc/default/locale
+  sudo timedatectl set-timezone Europe/Berlin
+}
+
+installPackage() {
+  sudo apt update
+  sudo apt install -qq -y zsh curl git jq zip ntp net-tools speedtest
+}
+
+ubuntu() {
+  curl -s https://packagecloud.io/install/repositories/ookla/speedtest-cli/script.deb.sh | sudo bash
+  installPackage
+  installEXA
+  setupLocale
+  installation
+  sudo usermod -s /usr/bin/zsh $(whoami) # -- Set ZSH default shell for user
+}
+
+if [[ "$(cat /etc/issue | grep Ubuntu | awk '{ print $1}')" = "Ubuntu" ]] || [[ "$(cat /etc/issue | grep Debian | awk '{ print $1}')" = "Debian" ]]; then
+  if [[ ! -d $DOTFILES ]]; then
+    ubuntu
+  fi
+  if [[ -d $DOTFILES ]]; then
+    read -p "[INFO] Dotfiles already installed. Do you want to reinstall? [y/N]: " confirmation
+    case $(echo $confirmation | tr '[A-Z]' '[a-z]') in
+    y | yes)
+      ubuntu
+      ;;
+    *)
+      exit 1
+      ;;
+    esac
+  fi
 fi

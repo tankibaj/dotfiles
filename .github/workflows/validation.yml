@@ -4,9 +4,9 @@ name: 'Dotfiles'
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
-    branches: [ main ]
+    branches: [main, development]
   pull_request:
-    branches: [ main ]
+    branches: [main, development]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -18,7 +18,7 @@ jobs:
   build:
     name: 'Run Test'
     # The type of runner that the job will run on
-    runs-on: macos-latest
+    runs-on: [ubuntu-latest, macos-latest]
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
@@ -33,3 +33,6 @@ jobs:
     # Install dotfiles
     - name: Install dotfiles
       run: ./install
+    
+    env:
+      CI: true
