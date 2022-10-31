@@ -18,11 +18,7 @@ jobs:
   build:
     name: 'Run Test'
     # The type of runner that the job will run on
-    # runs-on: [ubuntu-latest]
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, macos-latest]
+    runs-on: [ubuntu-latest, macos-latest]
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
