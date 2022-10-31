@@ -114,11 +114,7 @@ installEXA() {
   unzip exa-linux-x86_64-v*.zip
   sudo mv bin/exa /usr/local/bin/exa
   sudo mv completions/exa.zsh /usr/local/share/zsh/site-functions/exa.zsh
-  rm -rf bin
-  rm -rf completions
-  rm -rf man
-  rm -f exa-linux-x86_64-$EXA_LATEST_RELEASE.zip
-  cd -
+  rm -rf bin completions man exa-linux-x86_64-v*.zip
 }
 
 setupLocale() {
