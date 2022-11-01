@@ -75,6 +75,10 @@ cleanUp() {
     sudo rm -f $HOME/.zshrc
   fi
 
+  if [[ -L $HOME/.gitignore ]]; then
+    sudo rm -f $HOME/.gitignore
+  fi
+
   if [[ -d $DOTFILES ]]; then
     sudo rm -rf $DOTFILES
   fi
