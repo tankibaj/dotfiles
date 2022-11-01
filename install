@@ -67,20 +67,20 @@ backup() {
 }
 
 cleanUp() {
+  if [[ -L $HOME/.p10k.zsh ]]; then
+    sudo rm -f $HOME/.p10k.zsh
+  fi
+
+  if [[ -L $HOME/.zshrc ]]; then
+    sudo rm -f $HOME/.zshrc
+  fi
+
   if [[ -d $DOTFILES ]]; then
     sudo rm -rf $DOTFILES
   fi
 
   if [[ -d $ZSH ]]; then
     sudo rm -rf $ZSH
-  fi
-
-  if [[ -e $HOME/.p10k.zsh ]]; then
-    sudo rm -f $HOME/.p10k.zsh
-  fi
-
-  if [[ -L $HOME/.zshrc ]]; then
-    sudo rm -f $HOME/.zshrc
   fi
 }
 
