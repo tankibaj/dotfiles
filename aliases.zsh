@@ -18,7 +18,7 @@ if [[ "$(uname -s)" == "Darwin" ]]; then
   alias repos="cd $HOME/repos"
   alias github="cd $HOME/repos/github"
   alias gitlab="cd $HOME/repos/gitlab"
-  alias gitlab="cd $HOME/repos/gitea"
+  alias gitea="cd $HOME/repos/gitea"
 fi
 #[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 
