@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+function flush() {
+  find . -type d -name ".terraform" -print0 -exec rm -rf {} +
+  find . -type f -name ".terraform.lock.hcl" -print0 -exec rm -f {} +
+}
+
+help() {
+  local -r flagsTable=$(
+    printf "%s\n" \
+      "-f, --flush, flush             Clean up .terraform directory and .terraform.lock.hcl file" \
+      "-h, --help, help               Display help list"
+  )
+  echo -e "$flagsTable"
+}
+
+OPTION=$1
+case "$OPTION" in
+-f | --flush | flush)
+  flush
+  ;;
+*)
+  help
+  exit
+  ;;
+esac
