@@ -117,6 +117,8 @@ override.tf.json
 .terraformrc
 terraform.rc
 
+.terraform.lock.hcl
+
 ### Terragrunt ###
 # terragrunt cache directories
 **/.terragrunt-cache/*

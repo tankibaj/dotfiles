@@ -1,35 +1,31 @@
 name: 'Dotfiles'
 
-# Controls when the action will run. 
-on:
-  # Triggers the workflow on push or pull request events but only for the main branch
+on: # -- Controls when the action will run. Triggers the workflow on push or pull request events but only for the main branch
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-
-
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
-jobs:
-  # This workflow contains a single job called "build"
-  build:
-    name: 'Run Test'
-    # The type of runner that the job will run on
-    runs-on: macos-latest
-
-    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
+jobs: # -- A workflow run is made up of one or more jobs that can run sequentially or in parallel
+  MacOS: # -- This workflow job
+    name: 'Dotfiles on macOS'
+    runs-on: macos-latest # -- The type of runner that the job will run on
+    defaults:
+      run:
+        shell: bash # -- Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
+    steps: # -- Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Install dotfiles
+      run: ./install
+  Ubuntu: # -- This workflow job
+    name: 'Dotfiles on Ubuntu'
+    runs-on: ubuntu-latest
     defaults:
       run:
         shell: bash
-
-    # Checkout the repository to the GitHub Actions runner
     steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-
-    # Install dotfiles
-    - name: Install dotfiles
-      run: ./install
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install dotfiles
+        run: ./install

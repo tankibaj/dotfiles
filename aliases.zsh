@@ -3,14 +3,23 @@
 #=========================================================================
 alias ~="cd $HOME"
 alias dotfiles="$HOME/.dotfiles"
-alias doc="cd $HOME/documents"
-alias dl="cd $HOME/downloads"
-alias app="cd /applications"
-alias site="cd $HOME/documents/workspace/sites"
-alias snippets="cd $HOME/documents/workspace/snippets"
-alias github="cd $HOME/documents/workspace/github"
-alias gitlab="cd $HOME/documents/workspace/gitlab"
-alias workspace="cd $HOME/documents/workspace"
+
+if [[ "$(uname -s)" == "Linux" ]]; then
+  alias workspace='cd ~/workspace'
+fi
+
+if [[ "$(uname -s)" == "Darwin" ]]; then
+  alias doc="cd $HOME/documents"
+  alias dl="cd $HOME/downloads"
+  alias app="cd /applications"
+  alias workspace="cd $HOME/documents/workspace"
+  alias site="cd $HOME/documents/workspace/sites"
+  alias snippets="cd $HOME/documents/workspace/snippets"
+  alias repos="cd $HOME/repos"
+  alias github="cd $HOME/repos/github"
+  alias gitlab="cd $HOME/repos/gitlab"
+  alias gitea="cd $HOME/repos/gitea"
+fi
 #[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 
 #=========================================================================
@@ -123,28 +132,31 @@ listening() {
 #=========================================================================
 #      ---------------| Git |---------------
 #=========================================================================
-alias clone='git clone'
-alias add='git add .'
-alias commit='git commit -m'
-alias status='git status'
-alias log='git log'
-alias push='git push -u'
-alias pull='git pull'
-alias nah='git reset --hard && git clean -df'
-alias nahto='git reset --hard'
-alias bls='git branch -a'
-alias checkout='git checkout'
-alias checkoutnew='git checkout -b'
-alias brm='git branch -D'
-alias setorigin='git remote set-url origin'
-alias origin='git remote show origin'
-alias rls='git remote -v'
-alias remoterm='git remote remove'
-alias remoteren='git remote rename'
-alias commit-count='git rev-list --count'
-alias grm='rm -rf .git*'
-alias repo="gh repo"
-alias merge="git merge"
+if [ -x "$(command -v git)" ]; then
+  alias clone='git clone'
+  alias add='git add .'
+  alias commit='git commit -m'
+  alias status='git status'
+  alias log='git log'
+  alias push='git push -u'
+  alias pull='git pull'
+  alias nah='git reset --hard && git clean -df'
+  alias nahto='git reset --hard'
+  alias nahtomain='git fetch --all && git reset --hard origin/main'
+  alias bls='git branch -a'
+  alias checkout='git checkout'
+  alias checkoutnew='git checkout -b'
+  alias brm='git branch -D'
+  alias setorigin='git remote set-url origin'
+  alias origin='git remote show origin'
+  alias rls='git remote -v'
+  alias remoterm='git remote remove'
+  alias remoteren='git remote rename'
+  alias commit-count='git rev-list --count'
+  alias grm='rm -rf .git*'
+  alias repo="gh repo"
+  alias merge="git merge"
+fi
 
 gls() {
   if [[ $# -eq 1 ]]; then
@@ -166,24 +178,45 @@ gio() {
 #=========================================================================
 #      ---------------| Terraform |---------------
 #=========================================================================
-alias tinit='terraform init'
-alias fmt='terraform fmt'
-alias validate='terraform validate'
-alias plan='terraform fmt && terraform validate && terraform plan'
-alias apply='terraform apply'
-alias output='terraform output'
-alias state='terraform state'
-alias show='terraform show'
-alias tws='terraform workspace'
+if [ -x "$(command -v terraform)" ]; then
+  alias tinit='terraform init'
+  alias fmt='terraform fmt'
+  alias validate='terraform validate'
+  alias plan='terraform fmt && terraform validate && terraform plan'
+  alias apply='terraform apply'
+  alias output='terraform output'
+  alias state='terraform state'
+  alias show='terraform show'
+  alias tws='terraform workspace'
+fi
 #[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 
 #=========================================================================
 #      ---------------| Kubernetes |---------------
 #=========================================================================
-alias kctl='kubectl'
-alias k='kubectl'
+if [ -x "$(command -v kubectl)" ]; then
+  alias kctl='kubectl'
+  alias k='kubectl'
+  alias pod-lens='kubectl pod-lens'
+  alias node-shell='kubectl node-shell'
+  alias open-svc='kubectl open-svc'
+  alias watch-all="watch kubectl get all,ing,pvc $@"
+  alias watch-pod="watch kubectl get pod $@"
+  alias watch-pv="watch kubectl get pv,pvc $@"
+  alias watch-ing="watch kubectl get ing $@"
+  alias get-all="kubectl get all,pvc,ing,secret,cm $@"
+  alias get-events="kubectl get events --sort-by='.metadata.managedFields[0].time'"
+  alias get-pod="kubectl get pod $@"
+  alias get-pv="kubectl get pv $@"
+  alias get-pvc="kubectl get pvc $@"
+  alias get-ing="kubectl get ing $@"
+  alias get-secret="kubectl get secret $@"
+  alias get-cmap="kubectl get cm $@"
+fi
+
 alias kx='kubectx'
 alias kns='kubens'
+
 klogs() {
   if [[ $# -eq 2 ]]; then
     kubectl logs -f -n $1 $(kubectl get po -n $1 | egrep -o "$2[a-zA-Z0-9-]+")
@@ -192,36 +225,24 @@ klogs() {
     echo "Example: klogs <kube-system> <aws-load-balancer-controller>"
   fi
 }
-alias pod-lens='kubectl pod-lens'
-alias node-shell='kubectl node-shell'
-alias open-svc='kubectl open-svc'
-alias watch-all="watch kubectl get all,ing,pvc $@"
-alias watch-pv="watch kubectl get pv,pvc $@"
-alias get-all="kubectl get all,pvc,ing,secret,cm $@"
-alias get-event="kubectl get events --sort-by='.metadata.managedFields[0].time'"
-alias get-pod="kubectl get pod $@"
-alias get-pv="kubectl get pv $@"
-alias get-pvc="kubectl get pvc $@"
-alias get-ingress="kubectl get ing $@"
-alias get-secret="kubectl get secret $@"
-alias get-cmap="kubectl get cm $@"
-
 #[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 
 #=========================================================================
 #      ---------------| Vagrant |---------------
 #=========================================================================
-alias vssh="vagrant ssh"
-alias up="vagrant up"
-alias suspend="vagrant suspend"
-alias resume="vagrant resume"
-alias reload="vagrant reload"
-alias reloadp="vagrant reload --provision"
-alias halt="vagrant halt"
-alias globalstatus="vagrant global-status"
-alias box-list='vagrant box list'
-alias box-remove='vagrant box remove'
-alias box-add='vagrant box add'
+if [ -x "$(command -v vagrant)" ]; then
+  alias vssh="vagrant ssh"
+  alias vup="vagrant up"
+  alias vsuspend="vagrant suspend"
+  alias vresume="vagrant resume"
+  alias vreload="vagrant reload"
+  alias reloadp="vagrant reload --provision"
+  alias vhalt="vagrant halt"
+  alias globalstatus="vagrant global-status"
+  alias box-list='vagrant box list'
+  alias box-remove='vagrant box remove'
+  alias box-add='vagrant box add'
+fi
 
 destroy() {
   if [ -e .vagrant ]; then
@@ -237,25 +258,27 @@ destroy() {
 #=========================================================================
 #      ---------------| Docker |---------------
 #=========================================================================
-alias dls='docker container list --all --format "table {{.ID}}\t{{.Image}}\t{{.Names}}\t{{.Status}}\t{{.Ports}}"'
-alias dps="docker ps --all --format 'table {{.ID}}\t{{.Image}}\t{{.Status}}\t{{.Names}}\t{{.Ports}}'"
-alias dstart='docker start'
-alias dsa='docker ps -aq | xargs docker stop'
-alias dstop='docker stop'
-alias drma='docker ps -aq | xargs docker rm -f'
-alias drm='docker rm -f'
-alias drmi='docker rmi -f'
-alias drmia='docker images -aq | xargs docker rmi -f'
-alias dit='docker exec -it'
-alias dlogs='docker logs'
-alias di='docker images'
-alias dc='docker-compose'
-alias dcupd='docker-compose up -d'
-alias dcup='docker-compose up'
-alias dcdown='docker-compose down'
-alias dcbuild='docker-compose build'
-alias dins='docker inspect'
-alias dip="docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}'"
+if [ -x "$(command -v docker)" ]; then
+  alias dls='docker container list --all --format "table {{.ID}}\t{{.Image}}\t{{.Names}}\t{{.Status}}\t{{.Ports}}"'
+  alias dps="docker ps --all --format 'table {{.ID}}\t{{.Image}}\t{{.Status}}\t{{.Names}}\t{{.Ports}}'"
+  alias dstart='docker start'
+  alias dsa='docker ps -aq | xargs docker stop'
+  alias dstop='docker stop'
+  alias drma='docker ps -aq | xargs docker rm -f'
+  alias drm='docker rm -f'
+  alias drmi='docker rmi -f'
+  alias drmia='docker images -aq | xargs docker rmi -f'
+  alias dit='docker exec -it'
+  alias dlogs='docker logs'
+  alias di='docker images'
+  alias dc='docker-compose'
+  alias dcupd='docker-compose up -d'
+  alias dcup='docker-compose up'
+  alias dcdown='docker-compose down'
+  alias dcbuild='docker-compose build'
+  alias dins='docker inspect'
+  alias dip="docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}'"
+fi
 #[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 
 #=========================================================================
@@ -298,4 +321,137 @@ ydl() {
 #      ---------------| Markdown |---------------
 #=========================================================================
 alias toc='gh-md-toc'
+#[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
+
+#=========================================================================
+#      ---------------| Archive |---------------
+#=========================================================================
+# Extract archive
+extract() {
+  if [ -f $1 ]; then
+    case $1 in
+    *.tar) tar xf $1 ;;
+    *.tar.bz2) tar xjvf $1 ;;
+    *.tar.gz) tar xzvf $1 ;;
+    *.tar.xz) tar xvf $1 ;;
+    *.tbz2) tar xjf $1 ;;
+    *.tgz) tar xzf $1 ;;
+    *.gz) gunzip $1 ;;
+    *.zip) unzip $1 ;;
+    *) echo "'$1' cannot be extracted with this method!!!" ;;
+    esac
+  else
+    echo "'$1' is not a valid file"
+  fi
+}
+#[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
+
+#=========================================================================
+#      ---------------| Linux |---------------
+#=========================================================================
+# Manage Package
+if [ -x "$(command -v apt)" ]; then
+  alias update='sudo apt update'
+  alias upgrade='sudo apt dist-upgrade'
+  alias install='sudo apt install'
+  alias autoremove='sudo apt autoremove'
+fi
+
+# Systemctl
+if [ -x "$(command -v systemctl)" ]; then
+  alias ctlrestart='sudo systemctl restart'    # Start or restart one or more units
+  alias ctlstatus='sudo systemctl status'      # Show runtime status of one or more units
+  alias ctlstop='sudo systemctl stop'          # Stop (deactivate) one or more units
+  alias ctlstart='sudo systemctl start'        # Start (activate) one or more units
+  alias ctlreload='sudo systemctl reload'      # Reload one or more units
+  alias ctlenable='sudo systemctl enable'      # Enable one or more unit files
+  alias ctldisable='sudo systemctl disable'    # Disable one or more unit files
+  alias ctlkill='sudo systemctl kill'          # Send signal to processes of a unit
+  alias ctlclean='sudo systemctl clean'        # Clean runtime, cache, state, logs or configuration of unit
+  alias ctlisactive='sudo systemctl is-active' # Check whether units are active
+  alias ctlisfailed='sudo systemctl is-failed' # Check whether units are failed
+fi
+
+# Basic functions
+ips() {
+  if [[ $(ip -4 addr | grep inet | grep -vEc '127(\.[0-9]{1,3}){3}') -eq 1 ]]; then
+    echo
+    ip -4 addr | grep -w inet | grep -vE '127(\.[0-9]{1,3}){3}' | awk '{ print "\033[0;31m"$7"\033[0m"": ""\033[0;33m"$2"\033[0m"}'
+  else
+    echo
+    ip -4 addr | grep -w inet | grep -vE '127(\.[0-9]{1,3}){3}' | awk '{ print "\033[0;31m"$7"\033[0m"": ""\033[0;33m"$2"\033[0m"}' | nl -s '| '
+  fi
+}
+
+# Cloud-init
+alias cloud-init-output='less +F /var/log/cloud-init-output.log'
+alias cloud-init-status='sudo cloud-init status --wait --long'
+#[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
+
+#=========================================================================
+#      ---------------| Libvirt |---------------
+#=========================================================================
+if [ -x "$(command -v virsh)" ]; then
+  alias vls='sudo virsh list --all'
+  alias vlssnap='sudo virsh snapshot-list'
+  alias vlspool='sudo virsh pool-list'
+  alias vlsnet='sudo virsh net-list'
+  alias vlsvol='sudo virsh vol-list'
+  alias vinfo='sudo virsh dominfo'
+  alias vshutdown='sudo virsh shutdown'
+  alias vstart='sudo virsh start'
+  alias vautostart='sudo virsh autostart'
+  alias vreboot='sudo virsh reboot'
+  alias vreset='sudo virsh reset'
+  alias vcreate='sudo virsh create'
+  alias vdump='sudo virsh dumpxml'
+  alias vedit='sudo virsh edit'
+fi
+
+# Delte KVM instance
+vDestroy() {
+  if [ -z $1 ]; then
+    echo "Instance name required!!"
+  fi
+  sudo virsh shutdown $1
+  sudo virsh destroy $1
+  sudo virsh undefine $1
+  sudo rm -rfv /var/lib/libvirt/pool/default/$1.qcow2
+  if [ -f /var/lib/libvirt/images/$1-seed.qcow2 ]; then
+    sudo rm -rfv /var/lib/libvirt/images/$1-seed.qcow2
+  fi
+}
+
+# Create KVM Screenshot
+vCreateScreenshot() {
+  if [ -z $1 ]; then
+    echo "Instance name required!!"
+  fi
+  if [ -z $2 ]; then
+    echo "Screenshot name required!!"
+  fi
+  sudo virsh snapshot-create-as --domain $1 --name $2 --description $2
+}
+
+# Revert KVM Screenshot
+vRevertScreenshot() {
+  if [ -z $1 ]; then
+    echo "Instance name required!!"
+  fi
+  if [ -z $2 ]; then
+    echo "Screenshot name required!!"
+  fi
+  sudo virsh snapshot-revert --domain $1 --snapshotname $2 --running
+}
+
+# Delte KVM Screenshot
+vDeleteScreenshot() {
+  if [ -z $1 ]; then
+    echo "Instance name required!!"
+  fi
+  if [ -z $2 ]; then
+    echo "Screenshot name required!!"
+  fi
+  sudo virsh snapshot-delete --domain $1 --snapshotname $2
+}
 #[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
