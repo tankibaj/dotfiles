@@ -47,7 +47,7 @@ ubuntu() {
   echo "$USER ALL=(ALL:ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/$USER
   curl -s https://packagecloud.io/install/repositories/ookla/speedtest-cli/script.deb.sh | sudo bash
   sudo apt update
-  sudo apt install -qq -y zsh curl git jq zip ntp net-tools speedtest
+  sudo apt install -qq -y zsh curl vim git jq zip ntp net-tools speedtest
   installEXA
   setupLocale
   sudo usermod -s /usr/bin/zsh $(whoami) # -- Set ZSH default shell for user
