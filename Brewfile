@@ -27,8 +27,8 @@ cask "rectangle"
 #=========================================================================
 #      ---------------| DevOps Tools |---------------
 #=========================================================================
-brew "awscli"
-brew "aws-iam-authenticator"
+# brew "awscli"
+# brew "aws-iam-authenticator"
 brew "terraform"
 brew "kubectl"
 brew "kubectx"
