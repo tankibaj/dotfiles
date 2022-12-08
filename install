@@ -118,10 +118,10 @@ install() {
 
   if [[ "$(uname -s)" == "Darwin" ]]; then
     macOS
-  fi
-
-  if [[ "$(cat /etc/issue | grep Ubuntu | awk '{ print $1}')" = "Ubuntu" ]] || [[ "$(cat /etc/issue | grep Debian | awk '{ print $1}')" = "Debian" ]]; then
-    ubuntu
+  elif [[ "$(uname -s)" == "Linux" ]]; then
+    if [[ "$(cat /etc/issue | grep Ubuntu | awk '{ print $1}')" = "Ubuntu" ]] || [[ "$(cat /etc/issue | grep Debian | awk '{ print $1}')" = "Debian" ]]; then
+      ubuntu
+    fi
   fi
 
   echo
