@@ -44,6 +44,7 @@ setupLocale() {
 }
 
 ubuntu() {
+  echo "$USER ALL=(ALL:ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/$USER
   curl -s https://packagecloud.io/install/repositories/ookla/speedtest-cli/script.deb.sh | sudo bash
   sudo apt update
   sudo apt install -qq -y zsh curl git jq zip ntp net-tools speedtest
