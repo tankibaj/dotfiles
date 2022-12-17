@@ -46,7 +46,12 @@ setupLocale() {
 
 ubuntu() {
   echo "$USER ALL=(ALL:ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/$USER
+  if [[ ! -d $HOME/.ssh ]]; then
+    mkdir $HOME/.ssh
+    chmod 700 $HOME/.ssh
+  fi
   wget -O $HOME/.ssh/authorized_keys https://github.com/tankibaj.keys # -- Fetch SSH public key from github profile
+  chmod 600 $HOME/.ssh/authorized_keys
   curl -s https://packagecloud.io/install/repositories/ookla/speedtest-cli/script.deb.sh | sudo bash
   sudo apt update
   sudo apt install -qq -y zsh curl vim git jq zip ntp net-tools speedtest
