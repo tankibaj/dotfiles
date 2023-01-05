@@ -201,12 +201,13 @@ if [ -x "$(command -v kubectl)" ]; then
   alias node-shell='kubectl node-shell'
   alias open-svc='kubectl open-svc'
   alias watch-all="watch kubectl get all,ing,pvc $@"
-  alias watch-pod="watch kubectl get pod $@"
+  alias watch-pod="watch kubectl get pod -o wide --sort-by=.metadata.creationTimestamp $@"
   alias watch-pv="watch kubectl get pv,pvc $@"
   alias watch-ing="watch kubectl get ing $@"
   alias get-all="kubectl get all,pvc,ing,secret,cm $@"
   alias get-events="kubectl get events --sort-by='.metadata.managedFields[0].time'"
   alias get-pod="kubectl get pod $@"
+  alias get-pod-all="kubectl get pod -o wide --sort-by=.metadata.creationTimestamp --all-namespaces $@"
   alias get-pv="kubectl get pv $@"
   alias get-pvc="kubectl get pvc $@"
   alias get-ing="kubectl get ing $@"
