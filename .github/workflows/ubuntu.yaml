@@ -1,0 +1,21 @@
+name: 'Dotfiles on Ubuntu'
+
+on: # -- Controls when the action will run. Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs: # -- A workflow run is made up of one or more jobs that can run sequentially or in parallel
+  dotfiles: # -- This workflow job
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install dotfiles
+        run: ./install
