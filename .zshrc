@@ -190,4 +190,4 @@ export LANG=en_US.UTF-8
 [[ ! -f ${HOMEBREW_BIN}/velero ]] || source <(velero completion zsh)
 
 # iterm2 shell integration
-test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+[[ ! -f ${HOME}/.iterm2_shell_integration.zsh ]] || source "${HOME}/.iterm2_shell_integration.zsh"
