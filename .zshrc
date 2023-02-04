@@ -109,6 +109,8 @@ plugins=(
     copyfile
     history
     alias-finder
+    terraform
+    rsync
     )
 
 ZSH_DISABLE_COMPFIX="true"
