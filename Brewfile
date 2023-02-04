@@ -102,6 +102,9 @@ cask "font-roboto-mono-for-powerline"
 cask "font-source-serif-pro"
 cask "font-ubuntu-mono"
 cask "font-ubuntu-mono-derivative-powerline"
+cask "font-victor-mono"
+cask "font-ibm-plex-mono"
+cask "font-iosevka"
 #=========================================================================
 #      ---------------| AppStore |---------------
 #=========================================================================
