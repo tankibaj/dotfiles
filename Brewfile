@@ -38,13 +38,14 @@ cask 'vnc-viewer'
 brew "watch"
 brew "stern"
 brew "asciinema"
-cask "microsoft-remote-desktop"
+#cask "microsoft-remote-desktop"
 brew "git"
 brew "gh"
 cask "transmit"
 brew "github-markdown-toc"
 cask "boop"
 brew "cdrtools"
+brew "sops"
 #=========================================================================
 #      ---------------| Mac Hacks |---------------
 #=========================================================================
