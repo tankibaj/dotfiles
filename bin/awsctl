@@ -1,62 +1,97 @@
 #!/usr/bin/env bash
 
-list_profile() {
+aws_profile() {
+  # Get a list of available AWS profiles
   IFS=';' # https://en.wikipedia.org/wiki/Input_Field_Separators
+  read -ra profile_list <<<"$(aws configure list-profiles | tr '\n' ';')"
 
-  read -ra PROFILES <<<"$(aws configure list-profiles | tr '\n' ';')"
-
-  local COUNT=1
-  for i in ${PROFILES[@]}; do
+  # Print the available profiles with a number for each profile
+  local count=1
+  for i in ${profile_list[@]}; do
     read -ra ITEMS <<<"${i}"
-    echo "  ${COUNT}) ${ITEMS[0]}" >&2
-    ((COUNT = COUNT + 1))
+    echo -e "  \033[0;36m${count}) ${ITEMS[0]}\033[0m" >&2
+    ((count = count + 1))
   done
 
-  local SELECT=0
-  while [[ ${SELECT} -lt 1 || ${SELECT} -ge $COUNT ]]; do
-    read -p "Pick an AWS profile: " SELECT >&2
+  # Ask user to select a profile
+  local selected_profile_number=0
+  while [[ ${selected_profile_number} -lt 1 || ${selected_profile_number} -ge $count ]]; do
+    read -p "Select an AWS profile: " selected_profile_number >&2
   done
 
-  echo "${PROFILES[(SELECT - 1)]}"
+  # Return the selected profile as a value
+  echo "${profile_list[(selected_profile_number - 1)]}"
 }
 
-get_kubeconfig() {
+eks_kubeconfig() {
+  # Get the selected profile
+  local selected_profile=$(aws_profile)
+
+  # Get a list of available EKS clusters for the selected profile
   IFS=';' # https://en.wikipedia.org/wiki/Input_Field_Separators
+  read -ra cluster_list <<<"$(aws eks list-clusters --profile ${selected_profile} --output json | jq '.clusters[]' | tr -d '"' | tr '\n' ';')"
 
-  local PROFILE=$(list_profile)
-  read -ra CLUSTERS <<<"$(aws eks list-clusters --profile ${PROFILE} --output json | jq '.clusters[]' | tr -d '"' | tr '\n' ';')"
-
-  local COUNT=1
-  for i in ${CLUSTERS[@]}; do
-    read -ra ITEMS <<<"${i}"
-    echo "  ${COUNT}) ${ITEMS[0]}" >&2
-    ((COUNT = COUNT + 1))
+  # Print the available clusters with a number for each cluster
+  local count=1
+  for i in ${cluster_list[@]}; do
+    read -ra cluster <<<"${i}"
+    echo -e "  \033[0;35m${count}) ${cluster[0]}\033[0m" >&2
+    ((count = count + 1))
   done
 
-  local SELECT=0
-  while [[ ${SELECT} -lt 1 || ${SELECT} -ge $COUNT ]]; do
-    read -p "Pick an EKS cluster: " SELECT >&2
+  # Ask user to select an EKS cluster
+  local selected_cluster_number=0
+  while [[ ${selected_cluster_number} -lt 1 || ${selected_cluster_number} -ge $count ]]; do
+    read -p "Select an EKS cluster: " selected_cluster_number >&2
   done
 
-  aws eks update-kubeconfig --name ${CLUSTERS[(SELECT - 1)]} --profile ${PROFILE}
+  aws eks describe-cluster --name ${cluster_list[(selected_cluster_number - 1)]} --profile ${selected_profile}
+#  aws eks update-kubeconfig --name ${cluster_list[(selected_cluster_number - 1)]} --profile ${selected_profile}
+}
+
+
+secrets() {
+  # Get the selected profile
+  local selected_profile=$(aws_profile)
+
+  # Get a list of available secrets for the selected profile
+  IFS=';' # https://en.wikipedia.org/wiki/Input_Field_Separators
+  read -ra secret_list <<<"$(aws secretsmanager list-secrets --profile sharedservices-development --output json | jq '.SecretList[].Name' | tr -d '"' | tr '\n' ';')"
+
+  # Print the available secrets with a number for each secret
+  local count=1
+  for i in ${secret_list[@]}; do
+    read -ra cluster <<<"${i}"
+    echo -e "  \033[0;35m${count}) ${cluster[0]}\033[0m" >&2
+    ((count = count + 1))
+  done
+
+  # Ask user to select a secret
+  local selected_number=0
+  while [[ ${selected_number} -lt 1 || ${selected_number} -ge $count ]]; do
+    read -p "Select a Secret: " selected_number >&2
+  done
+
+  aws secretsmanager get-secret-value --secret-id ${secret_list[(selected_number - 1)]} --profile ${selected_profile} --query SecretString --output json | jq -r | jq .
 }
 
 help() {
   local -r flagsTable=$(
     printf "%s\n" \
-      "-c, --config, config           Download kubeconfig of eks cluster" \
-      "-e, --edit, edit               Open ~/.aws/config file in vim editor" \
-      "-h, --help, help               Display help list" \
-      "-l, --list, list               List aws profiles" \
-      "-p, --profile, profile         Change aws profile"
+      "-c, --kubeconfig, kubeconfig       Download kubeconfig of eks cluster" \
+      "-e, --edit, edit                   Open ~/.aws/config file in vim editor" \
+      "-h, --help, help                   Display help list" \
+      "-l, --list, list                   List aws profiles" \
+      "-p, --profile, profile             Change aws profile" \
+      "-s, --secret, secret               Get secret value from secretsmanager"
   )
   echo -e "$flagsTable"
 }
 
 OPTION=$1
 case "$OPTION" in
--c | --config | config)
-  get_kubeconfig
+-c | --kubeconfig | kubeconfig)
+  eks_kubeconfig
   ;;
 -e | --edit | edit)
   vim ~/.aws/config
@@ -68,7 +103,10 @@ case "$OPTION" in
   aws configure list-profiles
   ;;
 -p | --profile | profile)
-  AWS_PROFILE=$(list_profile) zsh
+  AWS_PROFILE=$(aws_profile) zsh
+  ;;
+-s | --secret | secret)
+  secrets
   ;;
 *)
   help
