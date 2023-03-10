@@ -56,7 +56,7 @@ secrets() {
 
   # Get a list of available secrets for the selected profile
   IFS=';' # https://en.wikipedia.org/wiki/Input_Field_Separators
-  read -ra secret_list <<<"$(aws secretsmanager list-secrets --profile sharedservices-development --output json | jq '.SecretList[].Name' | tr -d '"' | tr '\n' ';')"
+  read -ra secret_list <<<"$(aws secretsmanager list-secrets --profile ${selected_profile} --output json | jq '.SecretList[].Name' | tr -d '"' | tr '\n' ';')"
 
   # Print the available secrets with a number for each secret
   local count=1
