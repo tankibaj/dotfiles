@@ -93,7 +93,7 @@ describe_cluster() {
     read -p "Select an EKS cluster: " selected_cluster_number >&2
   done
 
-  aws eks describe-cluster --name ${cluster_list[(selected_cluster_number - 1)]} --profile ${selected_profile}
+  aws eks describe-cluster --name ${cluster_list[(selected_cluster_number - 1)]} --profile ${selected_profile} --output json | jq
 }
 
 secrets() {
