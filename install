@@ -16,6 +16,15 @@ kubectxAutoCompletion() {
   wget -O $HOME/.oh-my-zsh/completions/_kubens.zsh https://raw.githubusercontent.com/ahmetb/kubectx/master/completion/_kubens.zsh
 }
 
+kubectlPlugin() {
+  kubectl krew install open-svc       # -- Open the Kubernetes URL(s) for the specified service in your browser.
+  kubectl krew install pod-shell      # -- Display a list of pods to execute a shell in
+  kubectl krew install node-shell     # -- Spawn a root shell on a node via kubectl
+  kubectl krew install pod-lens       # -- Show pod-related resources
+  kubectl krew install sick-pods      # -- Find and debug Pods that are "Not Ready"
+  kubectl krew install neat           # -- Remove clutter from Kubernetes manifests to make them more readable.
+}
+
 #=========================================================================
 #      ---------------| MacOS |---------------
 #=========================================================================
@@ -27,9 +36,10 @@ macOS() {
   fi
 
   setupRepo
-  brew update                                   # Update Homebrew recipes
-  brew bundle install --file=$DOTFILES/Brewfile # Install all contents from Brewfile
+  brew update                                     # -- Update Homebrew recipes
+  brew bundle install --file=$DOTFILES/Brewfile   # -- Install all contents from Brewfile
   kubectxAutoCompletion
+  kubectlPlugin
 }
 
 #=========================================================================
@@ -120,9 +130,10 @@ setupRepo() {
   ln -s $DOTFILES/.zshrc $HOME/.zshrc       # -- Symlinks the .zshrc file from the .dotfiles/.zshrc
   ln -s $DOTFILES/.p10k.zsh $HOME/.p10k.zsh # -- Symlinks the .p10k.zsh file from .dotfiles/.p10k.zsh
 
-  # -- Global gitignore
+  # -- Git config
   ln -s $DOTFILES/.gitignore $HOME/.gitignore
   git config --global core.excludesfile $HOME/.dotfiles/.gitignore
+  git config --global init.defaultBranch main
 }
 
 install() {

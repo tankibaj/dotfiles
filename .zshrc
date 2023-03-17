@@ -167,11 +167,11 @@ export LANG=en_US.UTF-8
 # Kubens autocomplete
 [[ ! -f ${HOME}/.kubens ]] || source ${HOME}/.kubens
 
-
+# Helm autocomplete
 [[ ! -f ${HOME}/.helmrc ]] || source ${HOME}/.helmrc
 
 # Python path
-[[ ! -d /opt/homebrew/opt/python@3.9 ]] || export PATH="/opt/homebrew/opt/python@3.9/bin:$PATH"
+# [[ ! -d /opt/homebrew/opt/python@3.9 ]] || export PATH="/opt/homebrew/opt/python@3.9/bin:$PATH"
 
 # Krew path
 [[ ! -d ${HOME}/.krew ]] || export PATH="${PATH}:${HOME}/.krew/bin"
