@@ -121,6 +121,32 @@ secrets() {
   aws secretsmanager get-secret-value --secret-id ${secret_list[(selected_number - 1)]} --profile ${selected_profile} --query SecretString --output json | jq -r | jq .
 }
 
+db_instance_identifier() {
+  # Get the selected profile
+  local selected_profile=$(get_profile)
+
+  # Get a list of available secrets for the selected profile
+  IFS=';' # https://en.wikipedia.org/wiki/Input_Field_Separators
+  read -ra secret_list <<<"$(aws rds describe-db-instances --profile ${selected_profile} --query 'DBInstances[].DBInstanceIdentifier' --output json | jq '.[]' -r | tr -d '"' | tr '\n' ';')"
+
+  # Print the available secrets with a number for each secret
+  local count=1
+  for i in ${secret_list[@]}; do
+    read -ra cluster <<<"${i}"
+    echo -e "  \033[0;35m${count}) ${cluster[0]}\033[0m" >&2
+    ((count = count + 1))
+  done
+
+  # Ask user to select a secret
+  local selected_number=0
+  while [[ ${selected_number} -lt 1 || ${selected_number} -ge $count ]]; do
+    read -p "Select a rds cluster: " selected_number >&2
+  done
+
+  watch -n 10 "aws rds describe-db-instances --db-instance-identifier ${secret_list[(selected_number - 1)]} --profile ${selected_profile} | jq '.DBInstances[] | {DBInstanceIdentifier: .DBInstanceIdentifier, DBInstanceStatus: .DBInstanceStatus}'"
+}
+
+
 help() {
   local -r flagsTable=$(
     printf "%s\n" \
@@ -130,6 +156,7 @@ help() {
       "-k, --kubeconfig, kubeconfig                       Download kubeconfig of eks cluster" \
       "-l, --list, list                                   List aws profiles" \
       "-p, --profile, profile                             Change aws profile" \
+      "--rds-status, rds-status                           Check rds cluster status" \
       "-s, --secrets, secrets                             Get secret value from secretsmanager"
   )
   echo -e "$flagsTable"
@@ -154,6 +181,9 @@ case "$OPTION" in
   ;;
 -p | --profile | profile)
   AWS_PROFILE=$(get_profile) zsh
+  ;;
+--rds-status | rds-status)
+  db_instance_identifier
   ;;
 -s | --secret | secret)
   secrets
