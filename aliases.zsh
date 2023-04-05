@@ -26,8 +26,8 @@ fi
 #      ---------------| List & Size |---------------
 #=========================================================================
 if [ -x "$(command -v exa)" ]; then
-  alias ls='exa --long --group --icons --binary'
-  alias ls.='exa --long --group --icons --binary --all'
+  alias ls='exa --long --group --icons --header --git --binary'
+  alias ls.='exa --long --group --icons --header --git --binary --all'
   alias tree='exa --tree --icons'
   alias tree.='exa --tree --icons --all'
 else
