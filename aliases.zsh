@@ -3,9 +3,14 @@
 #=========================================================================
 alias ~="cd $HOME"
 alias dotfiles="$HOME/.dotfiles"
+alias repos="cd $HOME/repos"
+alias github="cd $HOME/repos/github"
+alias gitlab="cd $HOME/repos/gitlab"
+alias gitea="cd $HOME/repos/gitea"
 
 if [[ "$(uname -s)" == "Linux" ]]; then
-  alias workspace='cd ~/workspace'
+  alias workspace='cd $HOME/workspace'
+  
 fi
 
 if [[ "$(uname -s)" == "Darwin" ]]; then
@@ -13,12 +18,7 @@ if [[ "$(uname -s)" == "Darwin" ]]; then
   alias dl="cd $HOME/downloads"
   alias app="cd /applications"
   alias workspace="cd $HOME/documents/workspace"
-  alias site="cd $HOME/documents/workspace/sites"
   alias snippets="cd $HOME/documents/workspace/snippets"
-  alias repos="cd $HOME/repos"
-  alias github="cd $HOME/repos/github"
-  alias gitlab="cd $HOME/repos/gitlab"
-  alias gitea="cd $HOME/repos/gitea"
 fi
 #[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 
