@@ -29,6 +29,7 @@ cask "rectangle"
 # brew "awscli"
 # brew "aws-iam-authenticator"
 brew "terraform"
+brew "terraform-docs"
 brew "ansible"
 brew "kubectl"
 brew "kubectx"
@@ -40,6 +41,7 @@ brew "stern"
 brew "asciinema"
 #cask "microsoft-remote-desktop"
 brew "git"
+brew "pre-commit"
 brew "gh"
 cask "transmit"
 brew "github-markdown-toc"
@@ -50,6 +52,7 @@ brew "argo"
 brew "argocd"
 brew "vault"
 cask "intellij-idea"
+
 #=========================================================================
 #      ---------------| Mac Hacks |---------------
 #=========================================================================
