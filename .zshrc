@@ -111,6 +111,7 @@ plugins=(
     alias-finder
     terraform
     rsync
+    multipass
     )
 
 ZSH_DISABLE_COMPFIX="true"
