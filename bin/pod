@@ -43,7 +43,7 @@ function kube_list_pod_containers() {
 help() {
     local -r flagsTable=$(
         printf "%s\n" \
-            "-b, --busybox, busybox         Run busybox pod" \
+            "-f, --fixer, fixer             Run Alpine-Whale pod" \
             "-h, --help, help               Display help list" \
             "-l, --log, log                 View the logs for a container of a pod" \
             "-s, --shell, shell             Shell in a container of a pod" \
@@ -54,8 +54,8 @@ help() {
 
 OPTION=$1
 case "$OPTION" in
--b | --busybox | busybox)
-    kubectl run busybox --rm --image=radial/busyboxplus:curl -i --tty
+-f | --fixer | fixer)
+    kubectl run alpine-whale --rm --image=thenaim/alpine-whale -i --tty
     ;;
 -h | --help | help)
     help
