@@ -5,12 +5,47 @@ set -eo pipefail
 help() {
     local -r flagsTable=$(
         printf "%s\n" \
+            "-a, --add, add                 Add helm all defined helm repos" \
+            "--addons, addons               Get latest addons version" \
             "-h, --help, help               Display help list" \
             "-l, --list, list               List chart version" \
             "-v, --values, values           Download chart values"
     )
     echo -e "$flagsTable"
 }
+
+addons=(
+  "autoscaler=https://kubernetes.github.io/autoscaler"
+  "aws-ebs-csi-driver=https://kubernetes-sigs.github.io/aws-ebs-csi-driver"
+  "aws-efs-csi-driver=https://kubernetes-sigs.github.io/aws-efs-csi-driver"
+  "external-dns=https://kubernetes-sigs.github.io/external-dns"
+  "eks=https://aws.github.io/eks-charts"
+  "metrics-server=https://kubernetes-sigs.github.io/metrics-server"
+  "ingress-nginx=https://kubernetes.github.io/ingress-nginx"
+  "vmware-tanzu=https://vmware-tanzu.github.io/helm-charts"
+)
+
+argo=(
+  "argo=https://argoproj.github.io/argo-helm"
+)
+
+add_repos() {
+  repo_list=("$@")
+
+  for repo in "${repo_list[@]}"; do
+    name=$(echo "$repo" | cut -d '=' -f 1)
+    url=$(echo "$repo" | cut -d '=' -f 2)
+
+    # Check if the repository is already added
+    if helm repo list | grep -q "^$name"; then
+      echo "Helm repo $name is already added"
+    else
+      echo "Adding helm repo $name from $url"
+      helm repo add "$name" "$url"
+    fi
+  done
+}
+
 
 repo() {
   IFS=';' # https://en.wikipedia.org/wiki/Input_Field_Separators
@@ -53,6 +88,27 @@ chart() {
   echo "${CHART[(SELECT-1)]}"
 }
 
+latest_version() {
+    local repos=("$@")
+
+    # Print the header of the table
+    printf "%-50s | %-20s | %-30s\n" "Chart Name" "Chart Version" "App Version"
+    printf "%s\n" "-----------------------------------------------------------------------------------------"
+
+    # Loop through each repository
+    for repo in "${repos[@]}"; do
+        # Extract the name and URL
+        name=${repo%%=*}
+        url=${repo#*=}
+
+        # Update the repo to make sure we're getting the latest charts, suppress output
+        helm repo update > /dev/null 2>&1
+
+        # Fetch the latest chart version and app version
+        helm search repo "$name" --devel --max-col-width=0 | awk 'NR>1 {printf "%-50s | %-20s | %-30s\n", $1, $2, $3}'
+    done
+}
+
 version() {
   IFS=';' # https://en.wikipedia.org/wiki/Input_Field_Separators
 
@@ -76,6 +132,10 @@ version() {
 
 OPTION=$1
 case "$OPTION" in
+-a | --add | add)
+    add_repos "${addons[@]}"
+    add_repos "${argo[@]}"
+    ;;
 -h | --help | help)
     help
     ;;
@@ -83,9 +143,12 @@ case "$OPTION" in
     CHART=$(chart)
     helm search repo ${CHART} --versions
     ;;
+--addons | addons)
+    latest_version "${addons[@]}"
+    ;;
 -v | --values | values)
     CHART_VERSION=$(version)
-    helm show values ${CHART_VERSION} > values.default.yaml
+    helm show values ${CHART_VERSION} > values_v${CHART_VERSION}.default.yaml
     ;;
 *)
     help
