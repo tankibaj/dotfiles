@@ -212,6 +212,7 @@ if [ -x "$(command -v kubectl)" ]; then
   alias open-svc='kubectl open-svc'
   alias watch-all="watch kubectl get all,ing,pvc $@"
   alias watch-pod="watch kubectl get pod -o wide --sort-by=.metadata.creationTimestamp $@"
+  alias watch-node="watch kubectl get node -o wide --sort-by=.metadata.creationTimestamp $@"
   alias watch-pv="watch kubectl get pv,pvc $@"
   alias watch-ing="watch kubectl get ing $@"
   alias get-all="kubectl get all,pvc,ing,secret,cm $@"
@@ -222,7 +223,7 @@ if [ -x "$(command -v kubectl)" ]; then
   alias get-pvc="kubectl get pvc $@"
   alias get-ing="kubectl get ing $@"
   alias get-secret="kubectl get secret $@"
-  alias get-cmap="kubectl get cm $@"
+  alias get-cm="kubectl get cm $@"
 fi
 
 alias kx='kubectx'
