@@ -95,9 +95,9 @@ plugins=(
     laravel
     microk8s
     minikube
-    docker-compose
-    docker
-    docker-machine
+#    docker-compose
+#    docker
+#    docker-machine
     vagrant
     vault
     vscode
