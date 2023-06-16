@@ -148,7 +148,9 @@ case "$OPTION" in
     ;;
 -v | --values | values)
     CHART_VERSION=$(version)
-    helm show values ${CHART_VERSION} > values_v${CHART_VERSION}.default.yaml
+    FILEVERSION=$(echo ${CHART_VERSION} | awk '{print $3}')
+    FILENAME="values_v${FILEVERSION}.default.yaml"
+    helm show values ${CHART_VERSION} > ${FILENAME}
     ;;
 *)
     help
