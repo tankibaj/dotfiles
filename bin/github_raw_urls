@@ -1,0 +1,42 @@
+#!/bin/bash
+
+# Function to retrieve raw URLs recursively
+function get_raw_urls_recursive() {
+  local url=$1
+
+  # Make the API request and retrieve the file information
+  local response=$(curl -s $url)
+
+  # Check if the API request was successful
+  if [ $? -ne 0 ]; then
+    echo "Failed to retrieve file information from GitHub API."
+    exit 1
+  fi
+
+  # Parse the JSON response and extract the raw URL for each file
+  local files=$(echo "$response" | jq -r '.[] | select(.type == "file") | select(.name != ".gitignore") | .download_url')
+
+  # Print the raw URL for each file
+  if [ ! -z "$files" ]; then
+    echo "$files"
+  fi
+
+  # Recursively traverse subdirectories
+  local directories=$(echo "$response" | jq -r '.[] | select(.type == "dir") | .url')
+
+  for dir in $directories; do
+    get_raw_urls_recursive $dir
+  done
+}
+
+# Prompt the user for owner, repo, and branch names
+read -p "Enter the owner name: " owner
+read -p "Enter the repo name: " repo
+read -p "Enter the branch name: " branch
+
+# Create the API URL
+api_url="https://api.github.com/repos/$owner/$repo/contents?ref=$branch"
+
+# Retrieve the raw URLs recursively
+echo "Raw URLs:"
+get_raw_urls_recursive $api_url
