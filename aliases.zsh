@@ -166,6 +166,7 @@ if [ -x "$(command -v git)" ]; then
   alias grm='rm -rf .git*'
   alias repo="gh repo"
   alias merge="git merge"
+  alias squash-all="count=$(git rev-list --count HEAD); git rebase -i HEAD~$((count - 1))"
 fi
 
 gls() {

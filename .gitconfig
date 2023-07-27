@@ -1,0 +1,9 @@
+[core]
+	excludesfile = ~/.gitignore
+[user]
+	name = Naim Ahmmed
+	email = mail@thenaim.com
+[init]
+	defaultBranch = main
+[alias]
+	squash-all = "!f() { count=$(git rev-list --count HEAD); git rebase -i HEAD~$((count - 1)); }; f"

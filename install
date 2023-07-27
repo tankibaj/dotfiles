@@ -132,8 +132,10 @@ setupRepo() {
 
   # -- Git config
   ln -s $DOTFILES/.gitignore $HOME/.gitignore
-  git config --global core.excludesfile $HOME/.dotfiles/.gitignore
-  git config --global init.defaultBranch main
+  ln -s $DOTFILES/.gitconfig $HOME/.gitconfig
+#  git config --global core.excludesfile $HOME/.dotfiles/.gitignore
+#  git config --global init.defaultBranch main
+#  git config --global alias.squash-all '!f() { count=$(git rev-list --count HEAD); git rebase -i HEAD~$((count - 1)); }; f'
 }
 
 install() {
