@@ -8,19 +8,21 @@ from modules.kubewizard.exec_interactive_shell import exec_interactive_shell
 from modules.kubewizard.decode_secrets import decode_secrets
 from modules.kubewizard.describe_pod import describe_pod
 from modules.kubewizard.monitor_events import monitor_events
+from modules.kubewizard.port_forward_service import port_forward_service
+from modules.kubewizard.port_forward_service import Args
 
 
-def get_current_namespace():
+def get_namespace(namespace=None):
+    if namespace:
+        return namespace
+
     # Load the kubeconfig file and get the current context
     kube_config.load_kube_config()
     current_context = kube_config.kube_config.list_kube_config_contexts()[1]['context']
     return current_context.get('namespace', 'default')  # Return 'default' if namespace is not set
 
 
-# Import necessary modules
-# kubernetes for Kubernetes API, subprocess for shell commands, webbrowser to open browser
-
-def main_menu(output_format='plain', follow=False, all_namespaces=False):
+def main_menu(output_format='plain', follow=False, all_namespaces=False, namespace=None, port=None, svc_port=None):
     """
     Show main menu and handle user input.
     """
@@ -37,51 +39,53 @@ def main_menu(output_format='plain', follow=False, all_namespaces=False):
     try:
         while True:
             choice = input((colored("Select an option: ", 'magenta')))
+            selected_namespace = get_namespace(namespace)  # get the namespace to use
 
             if choice == '1':
-                view_pod_logs(get_current_namespace(), follow)
+                view_pod_logs(selected_namespace, follow)
             elif choice == '2':
-                exec_interactive_shell(get_current_namespace())
+                exec_interactive_shell(selected_namespace)
             elif choice == '3':
-                decode_secrets(get_current_namespace(), output_format)
+                decode_secrets(selected_namespace, output_format)
             elif choice == '4':
-                describe_pod(get_current_namespace())
+                describe_pod(selected_namespace)
             elif choice == '5':
-                monitor_events(get_current_namespace(), all_namespaces)
+                monitor_events(selected_namespace, all_namespaces)
             elif choice == '6':
-                port_forward_service()
+                port_forward_args = Args(selected_namespace, port, svc_port)
+                port_forward_service(port_forward_args)
             elif choice == '7':
-                print(get_current_namespace())
+                print(selected_namespace)
             else:
                 print("Invalid option. Try again.")
     except KeyboardInterrupt:
         print(colored("\n\nExiting Kubernetes Wizard. Goodbye!", 'red', attrs=['bold']))
 
 
-def port_forward_service():
-    # List all services and their corresponding pods in the namespace
-    # User selects a service
-    # Start port-forwarding for the selected service
-    # Open the service in the default web browser
-    pass
-
-
-# Execution starts here
 if __name__ == "__main__":
     # Create an argument parser
     parser = argparse.ArgumentParser(description="Kubernetes Wizard")
 
+    # Add the "--all-namespaces" or "-A" argument
+    parser.add_argument('--all-namespaces', '-A', action='store_true', help='List the requested object(s) across all '                                                         'namespaces')
+
+    # Add the "--namespace" or "-n" argument
+    parser.add_argument("--namespace", "-n", type=str,  help="The Kubernetes namespace to use")
+
     # Add the "--output" or "-o" argument
-    parser.add_argument("--output", "-o", choices=["plain", "json"], default="plain", help="Output format")
+    parser.add_argument("--output", "-o", choices=["plain", "json"], default="plain", help="Output format of secrets")
 
     # Add the "--follow" or "-f" argument
     parser.add_argument('--follow', "-f", action="store_true", help='Follow logs')
 
-    # Add the "--all-namespaces" or "-A" argument
-    parser.add_argument('--all-namespaces', '-A', action='store_true', help='Monitor events in all namespaces')
+    # Add the "--port" or "-p" argument
+    parser.add_argument("--port", "-p", type=int, help="The port on which to run the proxy. Set to 0 to pick a random "
+                                                       "port. (default 8001)")
+    # Add the "--svc-port" argument
+    parser.add_argument("--svc-port", help="The service port name or number. default is empty and uses the first port")
 
     # Parse the arguments
     args = parser.parse_args()
 
     # Execute the main menu and pass the output format and follow flag
-    main_menu(args.output, args.follow, args.all_namespaces)
+    main_menu(args.output, args.follow, args.all_namespaces, args.namespace, args.port, args.svc_port)
