@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 
 from kubernetes import config as kube_config
+from termcolor import colored
 from modules.kubewizard.view_pod_logs import view_pod_logs
+from modules.kubewizard.exec_interactive_shell import exec_interactive_shell
 
 
 def get_current_namespace():
@@ -26,13 +28,14 @@ def main_menu():
     print("5: Monitor Events")
     print("6: Port-forward a Service")
     print("7: Quit")
+    print("=====================================")
 
-    choice = input("Select an option: ")
+    choice = input((colored("Select an option: ", 'magenta')))
 
     if choice == '1':
         view_pod_logs(get_current_namespace())
     elif choice == '2':
-        exec_interactive_shell()
+        exec_interactive_shell(get_current_namespace())
     elif choice == '3':
         decode_secrets()
     elif choice == '4':
@@ -45,21 +48,6 @@ def main_menu():
         print(get_current_namespace())
     else:
         print("Invalid option. Try again.")
-
-
-# def view_pod_logs():
-#     # List all pods in the namespace
-#     # User selects a pod
-#     # Fetch and display logs for the selected pod
-#     print("Viewing pod logs")
-#     # pass
-
-
-def exec_interactive_shell():
-    # List all pods in the namespace
-    # User selects a pod
-    # Start interactive shell session in the selected pod
-    pass
 
 
 def decode_secrets():
