@@ -27,7 +27,7 @@ def select_container(containers):
     return containers[selected]
 
 
-def view_pod_logs(namespace="default"):
+def view_pod_logs(namespace="default", follow=False):
     pod_list = get_available_pods(namespace)
 
     if not pod_list:
@@ -42,13 +42,19 @@ def view_pod_logs(namespace="default"):
         selected_container = containers[0]
 
     v1 = client.CoreV1Api()
-    log = v1.read_namespaced_pod_log(name=selected_pod, namespace=namespace, container=selected_container)
 
-    print(colored(f"Logs for {selected_pod} container {selected_container}:", 'cyan', attrs=['bold']))
-    print(log)
+    if follow:
+        logs = v1.read_namespaced_pod_log(name=selected_pod, namespace=namespace, container=selected_container,
+                                          follow=True, _preload_content=False)
+        for line in logs.stream():
+            print(line.decode('utf-8').strip())
+    else:
+        log = v1.read_namespaced_pod_log(name=selected_pod, namespace=namespace, container=selected_container)
+        print(colored(f"Logs for {selected_pod} container {selected_container}:", 'cyan', attrs=['bold']))
+        print(log)
 
 
 if __name__ == "__main__":
     # You can add a CLI parser here to get the namespace from the user
     namespace = "default"  # Replace with CLI input or set to current context namespace
-    view_pod_logs(namespace)
+    view_pod_logs(namespace, follow=True)

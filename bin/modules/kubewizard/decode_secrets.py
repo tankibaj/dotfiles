@@ -56,7 +56,7 @@ def decode_secrets(namespace="default", output_format="plain"):
 
 
 if __name__ == "__main__":
-    namespace = "gitea"
+    namespace = "default"
     parser = argparse.ArgumentParser(description="Kubernetes Wizard")
     parser.add_argument("--output", "-o", choices=["plain", "json"], default="plain", help="Output format")
     args = parser.parse_args()

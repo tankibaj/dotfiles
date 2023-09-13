@@ -18,7 +18,7 @@ def get_current_namespace():
 # Import necessary modules
 # kubernetes for Kubernetes API, subprocess for shell commands, webbrowser to open browser
 
-def main_menu(output_format='plain'):
+def main_menu(output_format='plain', follow=False):
     """
     Show main menu and handle user input.
     """
@@ -35,7 +35,7 @@ def main_menu(output_format='plain'):
     choice = input((colored("Select an option: ", 'magenta')))
 
     if choice == '1':
-        view_pod_logs(get_current_namespace())
+        view_pod_logs(get_current_namespace(), follow=follow)
     elif choice == '2':
         exec_interactive_shell(get_current_namespace())
     elif choice == '3':
@@ -80,9 +80,12 @@ if __name__ == "__main__":
     # Add the "--output" or "-o" argument
     parser.add_argument("--output", "-o", choices=["plain", "json"], default="plain", help="Output format")
 
+    # Add the "--follow" or "-f" argument
+    parser.add_argument('--follow', "-f", action="store_true", help='Follow logs')
+
     # Parse the arguments
     args = parser.parse_args()
 
-    # Execute the main menu and pass the output format
-    main_menu(args.output)
+    # Execute the main menu and pass the output format and follow flag
+    main_menu(args.output, args.follow)
 
