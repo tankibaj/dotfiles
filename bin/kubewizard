@@ -7,6 +7,7 @@ from modules.kubewizard.view_pod_logs import view_pod_logs
 from modules.kubewizard.exec_interactive_shell import exec_interactive_shell
 from modules.kubewizard.decode_secrets import decode_secrets
 from modules.kubewizard.describe_pod import describe_pod
+from modules.kubewizard.monitor_events import monitor_events
 
 
 def get_current_namespace():
@@ -19,7 +20,7 @@ def get_current_namespace():
 # Import necessary modules
 # kubernetes for Kubernetes API, subprocess for shell commands, webbrowser to open browser
 
-def main_menu(output_format='plain', follow=False):
+def main_menu(output_format='plain', follow=False, all_namespaces=False):
     """
     Show main menu and handle user input.
     """
@@ -33,29 +34,28 @@ def main_menu(output_format='plain', follow=False):
     print("7: Quit")
     print("=====================================")
 
-    choice = input((colored("Select an option: ", 'magenta')))
+    try:
+        while True:
+            choice = input((colored("Select an option: ", 'magenta')))
 
-    if choice == '1':
-        view_pod_logs(get_current_namespace(), follow=follow)
-    elif choice == '2':
-        exec_interactive_shell(get_current_namespace())
-    elif choice == '3':
-        decode_secrets(get_current_namespace(), output_format)
-    elif choice == '4':
-        describe_pod(get_current_namespace())
-    elif choice == '5':
-        monitor_events()
-    elif choice == '6':
-        port_forward_service()
-    elif choice == '7':
-        print(get_current_namespace())
-    else:
-        print("Invalid option. Try again.")
-
-
-def monitor_events():
-    # Monitor and display real-time events in the namespace
-    pass
+            if choice == '1':
+                view_pod_logs(get_current_namespace(), follow)
+            elif choice == '2':
+                exec_interactive_shell(get_current_namespace())
+            elif choice == '3':
+                decode_secrets(get_current_namespace(), output_format)
+            elif choice == '4':
+                describe_pod(get_current_namespace())
+            elif choice == '5':
+                monitor_events(get_current_namespace(), all_namespaces)
+            elif choice == '6':
+                port_forward_service()
+            elif choice == '7':
+                print(get_current_namespace())
+            else:
+                print("Invalid option. Try again.")
+    except KeyboardInterrupt:
+        print(colored("\n\nExiting Kubernetes Wizard. Goodbye!", 'red', attrs=['bold']))
 
 
 def port_forward_service():
@@ -77,8 +77,11 @@ if __name__ == "__main__":
     # Add the "--follow" or "-f" argument
     parser.add_argument('--follow', "-f", action="store_true", help='Follow logs')
 
+    # Add the "--all-namespaces" or "-A" argument
+    parser.add_argument('--all-namespaces', '-A', action='store_true', help='Monitor events in all namespaces')
+
     # Parse the arguments
     args = parser.parse_args()
 
     # Execute the main menu and pass the output format and follow flag
-    main_menu(args.output, args.follow)
+    main_menu(args.output, args.follow, args.all_namespaces)
