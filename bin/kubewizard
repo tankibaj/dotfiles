@@ -1,0 +1,94 @@
+#!/usr/bin/env python3
+
+from kubernetes import config as kube_config
+from modules.kubewizard.view_pod_logs import view_pod_logs
+
+
+def get_current_namespace():
+    # Load the kubeconfig file and get the current context
+    kube_config.load_kube_config()
+    current_context = kube_config.kube_config.list_kube_config_contexts()[1]['context']
+    return current_context.get('namespace', 'default')  # Return 'default' if namespace is not set
+
+
+# Import necessary modules
+# kubernetes for Kubernetes API, subprocess for shell commands, webbrowser to open browser
+
+def main_menu():
+    """
+    Show main menu and handle user input.
+    """
+    print("========= Kubernetes Wizard =========")
+    print("1: View Pod Logs")
+    print("2: Execute Interactive Shell in Pod")
+    print("3: Decode Secrets")
+    print("4: Describe Pod")
+    print("5: Monitor Events")
+    print("6: Port-forward a Service")
+    print("7: Quit")
+
+    choice = input("Select an option: ")
+
+    if choice == '1':
+        view_pod_logs(get_current_namespace())
+    elif choice == '2':
+        exec_interactive_shell()
+    elif choice == '3':
+        decode_secrets()
+    elif choice == '4':
+        describe_pod()
+    elif choice == '5':
+        monitor_events()
+    elif choice == '6':
+        port_forward_service()
+    elif choice == '7':
+        print(get_current_namespace())
+    else:
+        print("Invalid option. Try again.")
+
+
+# def view_pod_logs():
+#     # List all pods in the namespace
+#     # User selects a pod
+#     # Fetch and display logs for the selected pod
+#     print("Viewing pod logs")
+#     # pass
+
+
+def exec_interactive_shell():
+    # List all pods in the namespace
+    # User selects a pod
+    # Start interactive shell session in the selected pod
+    pass
+
+
+def decode_secrets():
+    # List all secrets in the namespace
+    # User selects a secret
+    # Decode and display the selected secret
+    pass
+
+
+def describe_pod():
+    # List all pods in the namespace
+    # User selects a pod
+    # Fetch and display detailed information, including events and resource usage
+    pass
+
+
+def monitor_events():
+    # Monitor and display real-time events in the namespace
+    pass
+
+
+def port_forward_service():
+    # List all services and their corresponding pods in the namespace
+    # User selects a service
+    # Start port-forwarding for the selected service
+    # Open the service in the default web browser
+    pass
+
+
+# Execution starts here
+if __name__ == "__main__":
+    main_menu()
