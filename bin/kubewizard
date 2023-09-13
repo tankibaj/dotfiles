@@ -6,6 +6,7 @@ from termcolor import colored
 from modules.kubewizard.view_pod_logs import view_pod_logs
 from modules.kubewizard.exec_interactive_shell import exec_interactive_shell
 from modules.kubewizard.decode_secrets import decode_secrets
+from modules.kubewizard.describe_pod import describe_pod
 
 
 def get_current_namespace():
@@ -41,7 +42,7 @@ def main_menu(output_format='plain', follow=False):
     elif choice == '3':
         decode_secrets(get_current_namespace(), output_format)
     elif choice == '4':
-        describe_pod()
+        describe_pod(get_current_namespace())
     elif choice == '5':
         monitor_events()
     elif choice == '6':
@@ -50,13 +51,6 @@ def main_menu(output_format='plain', follow=False):
         print(get_current_namespace())
     else:
         print("Invalid option. Try again.")
-
-
-def describe_pod():
-    # List all pods in the namespace
-    # User selects a pod
-    # Fetch and display detailed information, including events and resource usage
-    pass
 
 
 def monitor_events():
@@ -88,4 +82,3 @@ if __name__ == "__main__":
 
     # Execute the main menu and pass the output format and follow flag
     main_menu(args.output, args.follow)
-
