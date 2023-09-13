@@ -1,0 +1,4 @@
+kubernetes~=27.2.0
+termcolor~=2.3.0
+pygments~=2.16.1
+argparse~=1.4.0

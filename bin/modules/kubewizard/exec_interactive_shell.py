@@ -56,14 +56,7 @@ def exec_interactive_shell(namespace="default"):
     subprocess.run(command, shell=True)  # This will directly attach to the terminal's stdin, stdout, and stderr
 
 
-def get_current_namespace():
-    # Load the kubeconfig file and get the current context
-    kube_config.load_kube_config()
-    current_context = kube_config.kube_config.list_kube_config_contexts()[1]['context']
-    return current_context.get('namespace', 'default')  # Return 'default' if namespace is not set
-
-
 if __name__ == "__main__":
     # Replace with CLI input or set to current context namespace
     namespace = "default"
-    exec_interactive_shell(get_current_namespace())
+    exec_interactive_shell(namespace)
