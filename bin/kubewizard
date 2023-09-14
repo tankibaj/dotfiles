@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+from InquirerPy import inquirer
 import argparse
 from kubernetes import config as kube_config
 from termcolor import colored
@@ -26,36 +27,41 @@ def main_menu(output_format='plain', follow=False, all_namespaces=False, namespa
     """
     Show main menu and handle user input.
     """
-    print("========= Kubernetes Wizard =========")
-    print("1: View Pod Logs")
-    print("2: Execute Interactive Shell in Pod")
-    print("3: Decode Secrets")
-    print("4: Describe Pod")
-    print("5: Monitor Events")
-    print("6: Port-forward a Service")
-    print("7: Quit")
-    print("=====================================")
-
     try:
         while True:
-            choice = input((colored("Select an option: ", 'magenta')))
-            selected_namespace = get_namespace(namespace)  # get the namespace to use
+            print(colored('Use the arrow keys to navigate: ↓ ↑', 'dark_grey'))
+            action = inquirer.select(
+                message="What do you want to do?",
+                choices=[
+                    {"name": "🔍 Watch Logs", "value": "watch_logs"},
+                    {"name": "🐚 Exec Shell in Pod", "value": "exec_shell"},
+                    {"name": "🔐 Get Secrets", "value": "get_secrets"},
+                    {"name": "🔍 Describe Pod", "value": "describe_pod"},
+                    {"name": "⚡️ Watch Events", "value": "watch_events"},
+                    {"name": "🔀 Port Forward", "value": "port_forward"},
+                    {"name": "❓ Help", "value": "help"},
+                    {"name": "🚪 Quit", "value": "quit"}
+                ],
+            ).execute()
 
-            if choice == '1':
+            selected_namespace = get_namespace(namespace)
+
+            if action == 'watch_logs':
                 view_pod_logs(selected_namespace, follow)
-            elif choice == '2':
+            elif action == 'exec_shell':
                 exec_interactive_shell(selected_namespace)
-            elif choice == '3':
+            elif action == 'get_secrets':
                 decode_secrets(selected_namespace, output_format)
-            elif choice == '4':
+            elif action == 'describe_pod':
                 describe_pod(selected_namespace)
-            elif choice == '5':
+            elif action == 'watch_events':
                 monitor_events(selected_namespace, all_namespaces)
-            elif choice == '6':
+            elif action == 'port_forward':
                 port_forward_args = Args(selected_namespace, port, svc_port)
                 port_forward_service(port_forward_args)
-            elif choice == '7':
-                print(selected_namespace)
+            elif action == 'quit':
+                print("Exiting...")
+                break
             else:
                 print("Invalid option. Try again.")
     except KeyboardInterrupt:
