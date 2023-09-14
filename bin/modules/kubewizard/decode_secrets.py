@@ -6,6 +6,7 @@ import argparse
 from pygments import highlight
 from pygments.lexers import JsonLexer
 from pygments.formatters import TerminalFormatter
+from InquirerPy import inquirer
 
 
 def get_available_secrets(namespace="default"):
@@ -29,12 +30,10 @@ def decode_secrets(namespace="default", output_format="plain"):
         print(colored("No secrets found in the current namespace.", "red"))
         return
 
-    print(colored("Available Secrets:", "yellow"))
-    for index, secret in enumerate(available_secrets):
-        print(f"{index + 1}. {secret}")
-
-    selected = int(input(colored("Select a secret by its number: ", "magenta"))) - 1
-    selected_secret = available_secrets[selected]
+    selected_secret = inquirer.select(
+        message="Choose a secret:",
+        choices=available_secrets,
+    ).execute()
 
     v1 = client.CoreV1Api()
     secret_data = v1.read_namespaced_secret(name=selected_secret, namespace=namespace).data
@@ -56,12 +55,7 @@ def decode_secrets(namespace="default", output_format="plain"):
 
 
 if __name__ == "__main__":
-    namespace = "default"
-    parser = argparse.ArgumentParser(description="Kubernetes Wizard")
+    parser = argparse.ArgumentParser(description="Decode Kubernetes Secrets")
     parser.add_argument("--output", "-o", choices=["plain", "json"], default="plain", help="Output format")
     args = parser.parse_args()
-
-    if args.output == "json":
-        decode_secrets(namespace, output_format="json")
-    else:
-        decode_secrets(namespace)
+    decode_secrets(output_format=args.output)
