@@ -1,5 +1,6 @@
 from kubernetes import client, config
 from termcolor import colored
+from InquirerPy import inquirer
 
 
 def get_available_pods(namespace):
@@ -30,7 +31,12 @@ def describe_pod(namespace="default"):
         print(colored("No pods found in namespace", "red"))
         return
 
-    selected_pod_name = select_pod(pod_list)
+    available_pod_names = [pod.metadata.name for pod in pod_list.items]
+
+    selected_pod_name = inquirer.select(
+        message="Choose a pod to describe:",
+        choices=available_pod_names
+    ).execute()
 
     v1 = client.CoreV1Api()
     pod_detail = v1.read_namespaced_pod(name=selected_pod_name, namespace=namespace)
