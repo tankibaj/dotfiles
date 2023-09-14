@@ -1,6 +1,6 @@
 from kubernetes import client, config
-from kubernetes import config as kube_config
 from termcolor import colored
+from InquirerPy import inquirer
 import subprocess
 
 
@@ -10,25 +10,6 @@ def get_available_pods(namespace):
     return v1.list_namespaced_pod(namespace=namespace)
 
 
-def select_pod(pod_list):
-    print(colored("Available Pods:", "cyan"))
-    for index, pod in enumerate(pod_list.items):
-        print(f"{index + 1}. {pod.metadata.name}")
-
-    selected = int(input(colored("Select a pod to exec into: ", 'magenta'))) - 1
-    selected_pod = pod_list.items[selected]
-    return selected_pod.metadata.name, [container.name for container in selected_pod.spec.containers]
-
-
-def select_container(containers):
-    print(colored("Available Containers:", "cyan"))
-    for index, container in enumerate(containers):
-        print(f"{index + 1}. {container}")
-
-    selected = int(input(colored("Select a container to exec into: ", 'magenta'))) - 1
-    return containers[selected]
-
-
 def exec_interactive_shell(namespace="default"):
     pod_list = get_available_pods(namespace)
 
@@ -36,12 +17,22 @@ def exec_interactive_shell(namespace="default"):
         print(colored("No pods found in the namespace", "red"))
         return
 
-    selected_pod, containers = select_pod(pod_list)
+    available_pod_names = [pod.metadata.name for pod in pod_list.items]
+    selected_pod = inquirer.select(
+        message="Choose a pod to exec into:",
+        choices=available_pod_names
+    ).execute()
+
+    selected_pod_obj = next(pod for pod in pod_list.items if pod.metadata.name == selected_pod)
+    containers = [container.name for container in selected_pod_obj.spec.containers]
 
     if len(containers) > 1:
-        selected_container = select_container(containers)
+        selected_container = inquirer.select(
+            message="Choose a container to exec into:",
+            choices=containers
+        ).execute()
     else:
-        selected_container = containers[0]
+        selected_container = containers[0]  # Auto-select if there's only one container
 
     # Check if bash is available in the container
     check_bash_command = f"kubectl exec {selected_pod} -n {namespace} -c {selected_container} -- which bash"
@@ -53,10 +44,8 @@ def exec_interactive_shell(namespace="default"):
 
     print(colored(f"Executing interactive shell in {selected_pod} container {selected_container}...", 'cyan'))
 
-    subprocess.run(command, shell=True)  # This will directly attach to the terminal's stdin, stdout, and stderr
+    subprocess.run(command, shell=True)
 
 
 if __name__ == "__main__":
-    # Replace with CLI input or set to current context namespace
-    namespace = "default"
-    exec_interactive_shell(namespace)
+    exec_interactive_shell()
