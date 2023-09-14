@@ -1,12 +1,12 @@
-from kubernetes import client, config
 import base64
 import json
-from termcolor import colored
-import argparse
-from pygments import highlight
-from pygments.lexers import JsonLexer
-from pygments.formatters import TerminalFormatter
+
 from InquirerPy import inquirer
+from kubernetes import client, config
+from pygments import highlight
+from pygments.formatters import TerminalFormatter
+from pygments.lexers import JsonLexer
+from termcolor import colored
 
 
 def get_available_secrets(namespace="default"):
@@ -52,10 +52,3 @@ def decode_secrets(namespace="default", output_format="plain"):
         print(colored(f"Decoded data for secret '{selected_secret}':", "cyan"))
         for key, value in decoded_data.items():
             print(f"{key}={value}")
-
-
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Decode Kubernetes Secrets")
-    parser.add_argument("--output", "-o", choices=["plain", "json"], default="plain", help="Output format")
-    args = parser.parse_args()
-    decode_secrets(output_format=args.output)

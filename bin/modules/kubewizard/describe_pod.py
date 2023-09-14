@@ -1,6 +1,6 @@
+from InquirerPy import inquirer
 from kubernetes import client, config
 from termcolor import colored
-from InquirerPy import inquirer
 
 
 def get_available_pods(namespace):
@@ -69,7 +69,3 @@ def describe_pod(namespace="default"):
             print(f"    Message: {event.message}")
             print(f"    Last Timestamp: {event.last_timestamp}")
             print(f"    Type: {event.type}")
-
-
-if __name__ == "__main__":
-    describe_pod()

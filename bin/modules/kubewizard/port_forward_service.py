@@ -1,27 +1,27 @@
-import argparse
+import socket
+import subprocess
+import threading
+import webbrowser
+
+from InquirerPy import inquirer
 from kubernetes import client, config
 from termcolor import colored
-import subprocess
-import webbrowser
-import socket
-import threading
-
-
-class Args:
-    def __init__(self, namespace, port, svc_port):
-        self.namespace = namespace
-        self.port = port
-        self.svc_port = svc_port
 
 
 # Function to read output and open browser if port forwarding starts
 def read_output(pipe, local_port):
+    webbrowser_opened = False
     while True:
         line = pipe.readline().decode('utf-8').strip()
         if line:
-            print(line)
-            if "Forwarding from" in line:
-                webbrowser.open(f"http://localhost:{local_port}")
+            if "Forwarding from" in line and not webbrowser_opened:
+                webbrowser.open(f"http://127.0.0.1:{local_port}")
+                webbrowser_opened = True  # Ensure the browser is opened only once
+            elif "Forwarding from" in line or "Handling connection for" in line:
+                # Skip these lines, don't print them.
+                continue
+            else:
+                print(line)
         if not line:
             break
 
@@ -33,12 +33,12 @@ def list_services(namespace):
 
 
 def select_service(service_list):
-    print(colored("Available Services:", "cyan"))
-    for index, service in enumerate(service_list.items):
-        print(f"{index + 1}. {service.metadata.name}")
-
-    selected = int(input(colored("Select a service to port-forward: ", 'magenta'))) - 1
-    return service_list.items[selected]
+    available_service_names = [service.metadata.name for service in service_list.items]
+    selected_service_name = inquirer.select(
+        message="Choose a service to port-forward:",
+        choices=available_service_names
+    ).execute()
+    return next(service for service in service_list.items if service.metadata.name == selected_service_name)
 
 
 def get_service_ports(service):
@@ -63,7 +63,7 @@ def port_forward_service(args):
 
     service_list = list_services(namespace)
 
-    if not service_list:
+    if not service_list or not service_list.items:
         print(colored("No services found in namespace", "red"))
         return
 
@@ -78,11 +78,9 @@ def port_forward_service(args):
     local_port = chosen_port or get_available_port(8001) or 'random'
 
     # Customized text for terminal
-    print(colored("======= Kubernetes Service Port Forward =======", "yellow"))
     print(colored(f"Open svc {selected_service.metadata.name}", "cyan"))
     print(colored(f"Starting to serve on 127.0.0.1:{local_port}", "green"))
     print(colored("Opening service in the default browser...", "blue"))
-    print("================================================")
 
     # Start port-forwarding
     process = subprocess.Popen(
@@ -105,13 +103,3 @@ def port_forward_service(args):
 
     # Wait for the subprocess to terminate
     process.wait()
-
-
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Port-forward a Kubernetes Service")
-    parser.add_argument("--namespace", "-n", default="default", help="Namespace to use")
-    parser.add_argument("--port", "-p", type=int, help="Local port for port-forwarding")
-    parser.add_argument("--svc-port", help="Service port name or number to forward")
-
-    args = parser.parse_args()
-    port_forward_service(args)

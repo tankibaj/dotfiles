@@ -1,7 +1,8 @@
+import subprocess
+
+from InquirerPy import inquirer
 from kubernetes import client, config
 from termcolor import colored
-from InquirerPy import inquirer
-import subprocess
 
 
 def get_available_pods(namespace):
@@ -45,7 +46,3 @@ def exec_interactive_shell(namespace="default"):
     print(colored(f"Executing interactive shell in {selected_pod} container {selected_container}...", 'cyan'))
 
     subprocess.run(command, shell=True)
-
-
-if __name__ == "__main__":
-    exec_interactive_shell()

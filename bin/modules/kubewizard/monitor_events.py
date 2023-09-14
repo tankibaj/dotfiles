@@ -25,9 +25,3 @@ def monitor_events(namespace="default", all_namespaces=False):
         print(f"Involved Object: {event_obj.involved_object.name}")
         print(f"Namespace: {event_obj.metadata.namespace}")
         print("=======================================")
-
-
-if __name__ == "__main__":
-    # You can add a CLI parser here to get the namespace from the user
-    namespace = "default"  # Replace with CLI input or set to current context namespace
-    monitor_events(namespace, all_namespaces=True)
