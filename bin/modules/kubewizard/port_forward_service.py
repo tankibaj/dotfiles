@@ -79,7 +79,7 @@ def port_forward_service(args):
 
     # Customized text for terminal
     print(colored("======= Kubernetes Service Port Forward =======", "yellow"))
-    print(colored(f"Open-svc {selected_service.metadata.name}", "cyan"))
+    print(colored(f"Open svc {selected_service.metadata.name}", "cyan"))
     print(colored(f"Starting to serve on 127.0.0.1:{local_port}", "green"))
     print(colored("Opening service in the default browser...", "blue"))
     print("================================================")
