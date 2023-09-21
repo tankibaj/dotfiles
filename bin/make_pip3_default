@@ -1,0 +1,33 @@
+#!/bin/bash
+
+make_pip3_default() {
+  # Check if pip3 exists
+  if command -v pip3 >/dev/null 2>&1; then
+      echo "pip3 exists. Proceeding..."
+
+      # Check if pip exists
+      if command -v pip >/dev/null 2>&1; then
+          echo "pip exists. Taking backup and removing..."
+
+          # Backup existing pip
+          sudo mv $(which pip) $(which pip)_backup
+
+          # Remove existing pip
+          sudo rm -f $(which pip)
+
+          echo "Backup and removal complete."
+      else
+          echo "pip does not exist. No need for backup."
+      fi
+
+      # Create a symbolic link to make pip point to pip3
+      sudo ln -s $(which pip3) /usr/local/bin/pip
+
+      pip --version
+      echo "Symbolic link created. pip now points to pip3."
+  else
+      echo "pip3 does not exist. Exiting."
+  fi
+}
+
+make_pip3_default
