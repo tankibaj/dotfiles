@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-
 import argparse
 from collections import namedtuple
 
@@ -11,7 +10,6 @@ from termcolor import colored
 from modules.kubewizard.decode_secrets import decode_secrets
 from modules.kubewizard.describe_pod import describe_pod
 from modules.kubewizard.exec_interactive_shell import exec_interactive_shell
-from modules.kubewizard.monitor_events import monitor_events
 from modules.kubewizard.port_forward_service import port_forward_service
 from modules.kubewizard.view_pod_logs import view_pod_logs
 
@@ -22,7 +20,6 @@ MAIN_MENU_CHOICES = [
     {"name": "🐚 Exec Shell in Pod", "value": "exec_shell"},
     {"name": "🔐 Get Secrets", "value": "get_secrets"},
     {"name": "🔍 Describe Pod", "value": "describe_pod"},
-    {"name": "⚡️ Watch Events", "value": "watch_events"},
     {"name": "🔀 Port Forward", "value": "port_forward"},
     {"name": "❓ Help", "value": "help"},
     {"name": "🚪 Quit", "value": "quit"}
@@ -73,7 +70,6 @@ def main():
             'exec_shell': lambda: exec_interactive_shell(action_args.namespace),
             'get_secrets': lambda: decode_secrets(action_args.namespace, action_args.output_format),
             'describe_pod': lambda: describe_pod(action_args.namespace),
-            'watch_events': lambda: monitor_events(action_args.namespace, action_args.all_namespaces),
             'port_forward': lambda: port_forward_service(action_args),
             'quit': lambda: exit("Exiting..."),
             'help': lambda: parser.print_help()
