@@ -159,8 +159,8 @@ export LANG=en_US.UTF-8
 # Krew path
 [[ ! -d ${HOME}/.krew ]] || export PATH="${PATH}:${HOME}/.krew/bin"
 
-# Zscaler CA
-[[ ! -f ${HOME}/zscaler-ca.pem ]] || export REQUESTS_CA_BUNDLE=${HOME}/zscaler-ca.pem
+# # Zscaler CA
+# [[ ! -f ${HOME}/zscaler-ca.pem ]] || export REQUESTS_CA_BUNDLE=${HOME}/zscaler-ca.pem
 
 # Kubectx autocomplete
 [[ ! -f ${HOME}/.kubectx ]] || source ${HOME}/.kubectx
