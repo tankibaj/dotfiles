@@ -54,6 +54,7 @@ brew "argocd"
 brew "vault"
 cask "intellij-idea"
 brew "velero"
+cask "kubent"
 
 #=========================================================================
 #      ---------------| Mac Hacks |---------------

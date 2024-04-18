@@ -17,3 +17,12 @@ The easiest way to install xCode is the command line. Type `xcode-select --insta
 ```bash
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/tankibaj/dotfiles/main/install)"
 ```
+
+
+### Enable python virtual environment for the tools [Optional]
+```bash
+python3 -m venv $HOME/.dotfiles.venv
+source $HOME/.dotfiles.venv/bin/activate
+pip install -r $HOME/.dotfiles/bin/requirements.txt
+```
+
