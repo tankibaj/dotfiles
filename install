@@ -132,6 +132,10 @@ setupRepo() {
 
   # -- Git config
   ln -s $DOTFILES/.gitignore $HOME/.gitignore
+
+  if [[ -e $HOME/.gitconfig ]]; then
+    rm -f $HOME/.gitconfig
+  fi
   ln -s $DOTFILES/.gitconfig $HOME/.gitconfig
 #  git config --global core.excludesfile $HOME/.dotfiles/.gitignore
 #  git config --global init.defaultBranch main

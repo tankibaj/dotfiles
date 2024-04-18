@@ -1,0 +1,40 @@
+#!/bin/bash
+
+# Define the virtual environment and script paths
+VENV_PATH="$HOME/.dotfiles.venv"
+SCRIPT_PATH="$HOME/.dotfiles/bin/kubewizard_app.py"
+REQUIREMENTS_PATH="$HOME/.dotfiles/bin/requirements.txt"
+DEP_INSTALLED_FLAG="$VENV_PATH/dep_installed.flag"
+
+# Check if the virtual environment directory exists
+if [ ! -d "$VENV_PATH" ]; then
+    echo "Virtual environment not found. Setting up now..."
+    # Create the virtual environment
+    python3 -m venv "$VENV_PATH"
+    echo "Virtual environment created at $VENV_PATH"
+    # Mark that dependencies need installation
+    NEEDS_DEP_INSTALL=true
+else
+    # Check if dependencies have been installed
+    if [ ! -f "$DEP_INSTALLED_FLAG" ]; then
+        NEEDS_DEP_INSTALL=true
+    fi
+fi
+
+# Activate the virtual environment
+source "$VENV_PATH/bin/activate"
+
+# Install dependencies if needed
+if [ "$NEEDS_DEP_INSTALL" = true ]; then
+    if [ -f "$REQUIREMENTS_PATH" ]; then
+        echo "Installing dependencies from $REQUIREMENTS_PATH..."
+        pip install -r "$REQUIREMENTS_PATH"
+        # Mark dependencies as installed
+        touch "$DEP_INSTALLED_FLAG"
+    else
+        echo "Requirements file not found at $REQUIREMENTS_PATH. Continuing without installing dependencies."
+    fi
+fi
+
+# Run your Python script with any passed arguments
+python3 "$SCRIPT_PATH" "$@"
