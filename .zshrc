@@ -80,7 +80,6 @@ plugins=(
     zsh-autosuggestions
     zsh-syntax-highlighting
     cp
-    iterm2
     git
     github
     gitignore
@@ -89,15 +88,12 @@ plugins=(
     kubectl
     kubectx
     helm
-    laravel
     microk8s
     minikube
-#    docker-compose
-#    docker
-#    docker-machine
+    docker-compose
+    docker
     vagrant
     vault
-    vscode
     terraform
     ansible
     python
@@ -109,6 +105,13 @@ plugins=(
     terraform
     rsync
     multipass
+    argocd
+    azure
+    encode64
+    extract
+    gh
+    gitignore
+    httpie
     )
 
 ZSH_DISABLE_COMPFIX="true"
@@ -147,12 +150,6 @@ export LANG=en_US.UTF-8
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ${HOME}/.p10k.zsh ]] || source ${HOME}/.p10k.zsh
 
-# Kubectl autocomplete
-[[ ! -f ${HOME}/.kubectlrc ]] || source ${HOME}/.kubectlrc
-
-# Helm autocomplete
-[[ ! -f ${HOME}/.helmrc ]] || source ${HOME}/.helmrc
-
 # Python path
 [[ ! -d /opt/homebrew/opt/python@3.9 ]] || export PATH="/opt/homebrew/opt/python@3.9/bin:$PATH"
 
@@ -161,30 +158,6 @@ export LANG=en_US.UTF-8
 
 # # Zscaler CA
 # [[ ! -f ${HOME}/zscaler-ca.pem ]] || export REQUESTS_CA_BUNDLE=${HOME}/zscaler-ca.pem
-
-# Kubectx autocomplete
-[[ ! -f ${HOME}/.kubectx ]] || source ${HOME}/.kubectx
-
-# Kubens autocomplete
-[[ ! -f ${HOME}/.kubens ]] || source ${HOME}/.kubens
-
-# Helm autocomplete
-[[ ! -f ${HOME}/.helmrc ]] || source ${HOME}/.helmrc
-
-# Python path
-# [[ ! -d /opt/homebrew/opt/python@3.9 ]] || export PATH="/opt/homebrew/opt/python@3.9/bin:$PATH"
-
-# Krew path
-[[ ! -d ${HOME}/.krew ]] || export PATH="${PATH}:${HOME}/.krew/bin"
-
-# Zscaler CA
-# [[ ! -f ${HOME}/ZscalerRootCertificate.crt ]] || export REQUESTS_CA_BUNDLE=${HOME}/ZscalerRootCertificate.crt
-
-# Kubectx autocomplete
-[[ ! -f ${HOME}/.kubectx ]] || source ${HOME}/.kubectx
-
-# Kubens autocomplete
-[[ ! -f ${HOME}/.kubens ]] || source ${HOME}/.kubens
 
 # stern autocomplete
 [[ ! -f ${HOMEBREW_BIN}/stern ]] || source <(stern --completion=zsh)
