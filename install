@@ -9,12 +9,12 @@ ZSH=$HOME/.oh-my-zsh
 #=========================================================================
 #      ---------------| Common |---------------
 #=========================================================================
-kubectxAutoCompletion() {
-  mkdir -p ~/.oh-my-zsh/completions
-  chmod -R 755 ~/.oh-my-zsh/completions
-  wget -O $HOME/.oh-my-zsh/completions/_kubectx.zsh https://raw.githubusercontent.com/ahmetb/kubectx/master/completion/_kubectx.zsh
-  wget -O $HOME/.oh-my-zsh/completions/_kubens.zsh https://raw.githubusercontent.com/ahmetb/kubectx/master/completion/_kubens.zsh
-}
+#kubectxAutoCompletion() {
+#  mkdir -p ~/.oh-my-zsh/completions
+#  chmod -R 755 ~/.oh-my-zsh/completions
+#  wget -O $HOME/.oh-my-zsh/completions/_kubectx.zsh https://raw.githubusercontent.com/ahmetb/kubectx/master/completion/_kubectx.zsh
+#  wget -O $HOME/.oh-my-zsh/completions/_kubens.zsh https://raw.githubusercontent.com/ahmetb/kubectx/master/completion/_kubens.zsh
+#}
 
 kubectlPlugin() {
   kubectl krew install open-svc       # -- Open the Kubernetes URL(s) for the specified service in your browser.
@@ -38,7 +38,7 @@ macOS() {
   setupRepo
   brew update                                     # -- Update Homebrew recipes
   brew bundle install --file=$DOTFILES/Brewfile   # -- Install all contents from Brewfile
-  kubectxAutoCompletion
+#  kubectxAutoCompletion
   kubectlPlugin
 }
 
