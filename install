@@ -72,8 +72,12 @@ ubuntu() {
     mkdir $HOME/.ssh
     chmod 700 $HOME/.ssh
   fi
-  wget -O $HOME/.ssh/authorized_keys https://github.com/tankibaj.keys # -- Fetch SSH public key from github profile
-  chmod 600 $HOME/.ssh/authorized_keys
+  KEYS_URL="https://github.com/tankibaj.keys"
+  AUTHORIZED_KEYS_FILE="$HOME/.ssh/authorized_keys"
+  mkdir -p $HOME/.ssh
+  wget -qO- $KEYS_URL >> $AUTHORIZED_KEYS_FILE # -- Fetch SSH public key from github profile
+  chmod 600 $AUTHORIZED_KEYS_FILE
+  chmod 700 $HOME/.ssh
   curl -s https://packagecloud.io/install/repositories/ookla/speedtest-cli/script.deb.sh | sudo bash
   sudo apt update
   sudo apt install -qq -y zsh curl vim git jq zip ntp net-tools speedtest
