@@ -92,8 +92,6 @@ plugins=(
     minikube
     docker-compose
     docker
-    vagrant
-    vault
     terraform
     ansible
     python
