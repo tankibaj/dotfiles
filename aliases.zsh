@@ -25,11 +25,11 @@ fi
 #=========================================================================
 #      ---------------| List & Size |---------------
 #=========================================================================
-if [ -x "$(command -v exa)" ]; then
-  alias ls='exa --long --group --icons --header --git --binary'
-  alias ls.='exa --long --group --icons --header --git --binary --all'
-  alias tree='exa --tree --icons'
-  alias tree.='exa --tree --icons --all'
+if [ -x "$(command -v eza)" ]; then
+  alias ls='eza --long --group --icons --header --git --binary'
+  alias ls.='eza --long --group --icons --header --git --binary --all'
+  alias tree='eza --tree --icons'
+  alias tree.='eza --tree --icons --all'
 else
   alias ls='ls -lhF'
   alias ls.='ls -lhFa'
@@ -235,7 +235,7 @@ klogs() {
     kubectl logs -f -n $1 $(kubectl get po -n $1 | egrep -o "$2[a-zA-Z0-9-]+")
   else
     echo "Usage: klogs <namespace> <pod prefix>"
-    echo "Example: klogs <kube-system> <aws-load-balancer-controller>"
+    echo "ezample: klogs <kube-system> <aws-load-balancer-controller>"
   fi
 }
 #[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
