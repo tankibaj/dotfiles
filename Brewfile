@@ -3,15 +3,12 @@
 #=========================================================================
 tap "homebrew/bundle"
 tap "homebrew/services"
-tap "teamookla/speedtest"
 #=========================================================================
 #      ---------------| Productivity |---------------
 #=========================================================================
 cask "notion"
 cask "the-unarchiver"
-cask "google-chrome"
 cask "iterm2"
-brew "speedtest"
 brew "nmap"
 cask "pdf-squeezer"
 cask "appcleaner"
