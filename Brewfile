@@ -100,10 +100,10 @@ cask "font-ibm-plex-mono"
 #=========================================================================
 #      ---------------| AppStore |---------------
 #=========================================================================
-#mas "Magnet", id: 441258766
-#mas "SnippetsLab", id: 1006087419
-#mas "Namecheap FastVPN", id: 1419729466
-#mas "Amphetamine", id: 937984704
-#mas "Strongbox", id: 1270075435
-#mas "iA Writer", id: 775737590
-#mas "DropOver", id: 1355679052
+mas "Magnet", id: 441258766
+mas "SnippetsLab", id: 1006087419
+mas "Namecheap FastVPN", id: 1419729466
+mas "Amphetamine", id: 937984704
+mas "Strongbox", id: 1270075435
+mas "iA Writer", id: 775737590
+mas "DropOver", id: 1355679052
