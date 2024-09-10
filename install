@@ -88,9 +88,8 @@ ubuntu() {
   fi
 
   # Install necessary packages
-  curl -s https://packagecloud.io/install/repositories/ookla/speedtest-cli/script.deb.sh | sudo bash
   sudo apt update
-  sudo apt install -qq -y zsh curl vim git jq zip ntp net-tools speedtest
+  sudo apt install -qq -y zsh curl vim git jq zip ntp net-tools
 
   # Call additional setup functions
   installEXA
