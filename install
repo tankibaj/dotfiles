@@ -45,25 +45,13 @@ macOS() {
 #=========================================================================
 #      ---------------| Ubuntu |---------------
 #=========================================================================
-installEXA() {
-  curl -s https://api.github.com/repos/ogham/exa/releases/latest |
-    grep browser_download_url |
-    grep exa-linux-x86_64-v |
-    cut -d '"' -f 4 |
-    wget -i -
-  unzip exa-linux-x86_64-v*.zip
-  sudo mv bin/exa /usr/local/bin/exa
-  sudo mv completions/exa.zsh /usr/local/share/zsh/site-functions/exa.zsh
-  rm -rf bin completions man exa-linux-x86_64-v*.zip
-}
-
-setupLocale() {
-  sudo apt install -qq -y locales
-  sudo rm -f /etc/default/locale
-  sudo locale-gen "en_US.UTF-8"
-  sudo update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
-  source /etc/default/locale
-  sudo timedatectl set-timezone Europe/Berlin
+installEZA() {
+  sudo mkdir -p /etc/apt/keyrings
+  wget -qO- https://raw.githubusercontent.com/eza-community/eza/main/deb.asc | sudo gpg --dearmor -o /etc/apt/keyrings/gierens.gpg
+  echo "deb [signed-by=/etc/apt/keyrings/gierens.gpg] http://deb.gierens.de stable main" | sudo tee /etc/apt/sources.list.d/gierens.list
+  sudo chmod 644 /etc/apt/keyrings/gierens.gpg /etc/apt/sources.list.d/gierens.list
+  sudo apt update
+  sudo apt install -y eza
 }
 
 ubuntu() {
@@ -92,8 +80,7 @@ ubuntu() {
   sudo apt install -qq -y zsh curl vim git jq zip ntp net-tools
 
   # Call additional setup functions
-  installEXA
-  setupLocale
+  installEZA
 
   # Set ZSH as the default shell for the user
   sudo usermod -s /usr/bin/zsh $(whoami)
