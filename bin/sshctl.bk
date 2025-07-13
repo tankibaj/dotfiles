@@ -1,0 +1,89 @@
+#!/usr/bin/env bash
+
+function copy_public_key() {
+  local SSH_PATH=~/.ssh/
+  IFS=';' # https://en.wikipedia.org/wiki/Input_Field_Separators
+
+  read -ra KEYS <<< "$(find ${SSH_PATH} -type f -name "*.pub" | cut -f6 -d"/" | tr '\n' ';')"
+
+  local COUNT=1
+  for i in ${KEYS[@]}; do
+    read -ra ITEMS <<< "${i}"
+    echo "  ${COUNT}) ${ITEMS[0]}" >&2
+    ((COUNT=COUNT+1))
+  done
+
+  local SELECT=0
+  while [[ ${SELECT} -lt 1 || ${SELECT} -ge $COUNT ]]; do
+    read -p "Pick a SSH Key: " SELECT >&2
+  done
+
+  cat ${SSH_PATH}/${KEYS[(SELECT-1)]} | pbcopy && echo "${KEYS[(SELECT-1)]} has been copied to clipboard"
+}
+
+list_added_key() {
+  while read -r line; do
+    for file in ~/.ssh/*.pub; do
+      printf "%s %s\n" "$(ssh-keygen -lf "$file" | awk '{$1=""}1')" "$file"
+    done | column -t | grep --color=auto "$line" || echo "$line"
+  done < <(ssh-add -l | awk '{print $2}')
+}
+
+get_all_key() {
+  for file in ~/.ssh/*.pub; do
+    printf "%s %s\n" "$(ssh-keygen -lf "$file" | awk '{$1=""}1')" "$file"
+  done | column -t | grep --color=auto "$line" || echo "$line"
+}
+
+
+help() {
+    local -r flagsTable=$(
+        printf "%s\n" \
+            "-a, --add, add                 Add all private keys from .ssh directory" \
+            "-c, --copy, copy               Copy selected public key to clipboard" \
+            "-C, --config, config           Open .ssh/config file in vim editor" \
+            "-g, --get, get                 List all keys from .ssh directory" \
+            "-h, --help, help               Display help list" \
+            "-H, --host, host               List all hosts from .ssh/config file" \
+            "-l, --list, list               List added keys" \
+            "-r, --remove, remove           Remove all keys belonging to a hostname from a .ssh/known_hosts file"
+    )
+    echo -e "$flagsTable"
+}
+
+
+OPTION=$1
+case "$OPTION" in
+-a | --add | add)
+    grep -slR "PRIVATE" ~/.ssh/ | xargs ssh-add --apple-use-keychain
+    ;;
+-c | --copy | copy)
+    copy_public_key
+    ;;
+-C | --config | config)
+    vim ~/.ssh/config
+    ;;
+-g | --get | get)
+    get_all_key
+    ;;
+-H | --host | host)
+    grep '^Host' $HOME/.ssh/config | sed 's/Host //' | sort -u
+    ;;
+-h | --help | help)
+    help
+    ;;
+-l | --list | list)
+    list_added_key
+    ;;
+-r | --remove | remove)
+    if [ -z $2 ]; then
+      echo "Usage:: sshctl --remove <HOST IP | HOST NAME>"
+      exit 1;
+    fi
+    ssh-keygen -R $2
+    ;;
+*)
+    help
+    exit
+    ;;
+esac
